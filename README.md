@@ -19,10 +19,6 @@
 
 > See the sample code for the above demo in `./examples/prompt.py`.
 
-## ✨News: `bullet==2.2.0` is up (Finally!)
-
-You can now download the newest version of bullet on PyPI!
-
 ## Bullet-lists and checkboxes
 > 🎨 Robust support for user-defined styles.
 <table>
@@ -77,10 +73,6 @@ You can now download the newest version of bullet on PyPI!
 <img src="./assets/gifs/numbers.gif" width="600"/>
 
 ## Setting up `bullet`
-> From PyPI
-```shell
-$ pip install bullet
-```
 > Build from Source
 ```shell
 $ git clone https://github.com/bchao1/bullet.git
@@ -95,6 +87,3 @@ $ pip install .
 ## Contributing
 🎉 Directly send PRs! Make sure development is done and tested in `Python >= 3.6`.
 
-## Todo
-- Windows Support
-- Search bar with autocomplete
