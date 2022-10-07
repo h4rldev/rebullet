@@ -77,8 +77,8 @@
 ## Setting up `bullet`
 > Build from Source
 ```shell
-$ git clone https://github.com/bchao1/bullet.git
-$ cd bullet
+$ git clone https://github.com/h4rldev/bullet-fork
+$ cd bullet-fork
 $ pip install .
 ```
 ## Documentation
