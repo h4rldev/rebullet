@@ -9,9 +9,9 @@
 <a target="_blank" href="http://makeapullrequest.com" title="PRs Welcome"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 </p>
 
-***
-THIS PROJECT NEEDS NEW CONTRIBUTORS, I FORKED THIS PROJECT TO TRY TO KEEP IT ALIVE AND FIX SOME THINGS
-***
+
+# THIS PROJECT NEEDS NEW CONTRIBUTORS, I FORKED THIS PROJECT TO TRY TO KEEP IT ALIVE AND FIX SOME THINGS
+
 
 
 ***
