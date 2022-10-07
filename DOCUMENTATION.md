@@ -21,6 +21,7 @@
 - `bullet` Objects
     - [Using `Bullet` Object](#topic_7)
     - [Using `Check` Object](#topic_8)
+    - [Using `CheckDependencies` Object](#topic_9)
     - [Using `Input` Object](#topic_9)
     - [Using `YesNo` Object](#topic_10)
     - [Using `Password` Object](#topic_11)
@@ -125,37 +126,59 @@ client = Bullet(**styles.Greece)
 - Check/Un-check an item by pressing **space**.
 - Returns the a list of chosen items after pressing **enter**.
 
-## ⌨️ Using `Input` Object<a name="topic_9"></a>
+## ⌨️ Using `CheckDependencies` Object<a name="topic_9"></a>
+> Multiple-choice prompt that automatically checks dependencies.
+- Define `check` when initializing `CheckDependencies` object.
+- Move current position up and down using **arrow keys**. 
+- Check/Un-check an item by pressing **space**.
+- Returns the a list of chosen items after pressing **enter**.
+
+### Defining dependencies
+- Each choice option must contain a tuple of dependancy choices
+
+```python
+dependency_tree = (
+    ("Option A", ("Option B",)),
+    ("Option B", ("Option C",)),
+    ("Option C", ()),
+    ("Option D", ("Option C", "Option E")),
+    ("Option E", ()),
+)
+cli = CheckDependencies("Check some options", dep_tree=dependency_tree)
+print(cli.launch())
+```
+
+## ⌨️ Using `Input` Object<a name="topic_10"></a>
 > Just vanilla user input.
 
 - `strip: bool`: whether to strip trailing spaces.
 - `pattern: str`: Default is `""`. If defined, user input should match pattern.
 
-## ⌨️ Using `YesNo` Object<a name="topic_10"></a>
+## ⌨️ Using `YesNo` Object<a name="topic_11"></a>
 > Guarded Yes/No question.
 - Only enter `y/Y` or `n/N`. Other invalid inputs will be guarded, and the user will be asked to re-enter.
 
-## ⌨️ Using `Password` Object<a name="topic_11"></a>
+## ⌨️ Using `Password` Object<a name="topic_12"></a>
 > Enter passwords. 
 - Define `hidden` when initializing `Password` object. This would be the character shown on the terminal when passwords are entered.
 - In convention, space characters `' '` are guarded and should not be in a password.
 
-## ⌨️ Using `Numbers` Object<a name="topic_12"></a>
+## ⌨️ Using `Numbers` Object<a name="topic_13"></a>
 > Enter numeric values.
 - Non-numeric values will be guarded, and the user will be asked to re-enter.
 - Define `type` to cast return value. For example, `type = float`, will cast return value to `float`.
 
-## ⌨️ Using `Date` Objects<a name="topic_13"></a>
+## ⌨️ Using `Date` Objects<a name="topic_14"></a>
 > Enter date values
 - Values will be [parsed with `dateutil.parser`](https://dateutil.readthedocs.io/en/stable/parser.html), which is capable of handling strings in many different formats (e.g., "2020-8-21", "08/21/2020", or "Aug 21 2020" would all be parsed as the same date).
 - If the value provided cannot be parsed, the user will be asked to re-enter.
 - Returns a `datetime.date` object
 - `format_str: str`: [Format string](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) used to display default value, defaults to `%m/%d/%Y`
 
-## ⌨️ Using `Prompt` Objects<a name="topic_14"></a>
+## ⌨️ Using `Prompt` Objects<a name="topic_15"></a>
 > Wrapping it all up.
 
-### Using `VerticalPrompt` Object<a name="topic_15"></a>
+### Using `VerticalPrompt` Object<a name="topic_16"></a>
 - Stack `bullet` UI components into one vertically-rendered prompt.
 - Returns a list of tuples `(prompt, result)`.
 - `spacing`: number of lines between adjacent UI components.
@@ -177,20 +200,20 @@ cli = VerticalPrompt(
 result = cli.launch()
 ```
 
-### Using  `SlidePrompt` Object<a name="topic_16"></a>
+### Using  `SlidePrompt` Object<a name="topic_17"></a>
 - Link `bullet` UI components into a multi-stage prompt. Previous prompts will be cleared upon entering the next stage.
 - Returns a list of tuples `(prompt, result)`.
 
 > For `Prompt` ojects, call `summarize()` after launching the prompt to print out user input.
 
-## ⌨️ Using `ScrollBar` Object<a name="topic_17"></a>
+## ⌨️ Using `ScrollBar` Object<a name="topic_18"></a>
 > **Enhanced `Bullet`**: Too many items? It's OK!
 - `pointer`: points to item currently selected.
 - `up_indicator`, `down_indicator`: indicators shown in first and last row of the rendered items.
 - `height`: maximum items rendered on terminal.
     - For example, your can have 100 choices (`len(choices) = 100`) but define `height = 5`.
 
-# More Customization: Extending Existing Prompts<a name="topic_18"></a>
+# More Customization: Extending Existing Prompts<a name="topic_19"></a>
 > See `./examples/check.py` for the big picture of what's going on.
 
 In `bullet`, you can easily inherit a base class (existing `bullet` objects) and create your customized prompt. This is done by introducing the `keyhandler` module to register user-defined keyboard events.
@@ -204,7 +227,7 @@ def accept(self):
     # do some validation checks: chosen items >= 1 and <= 3.
 ```
 Note that `accept()` is the method for **all** prompts to return user input. The binded keyboard event by default is `NEWLINE_KEY` pressed.
-## A List of Default Keyboard Events<a name="topic_19"></a>
+## A List of Default Keyboard Events<a name="topic_20"></a>
 > See `./bullet/charDef.py`
 - `LINE_BEGIN_KEY` : Ctrl + H
 - `LINE_END_KEY`: Ctrl + E
