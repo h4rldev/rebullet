@@ -87,5 +87,5 @@ $ pip install .
 > Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`, `SlidePrompt`, `Scrollbar`.
 
 ## Contributing
-🎉 Directly send PRs! Make sure development is done and tested in `Python >= 3.6`.
+🎉 Directly send PRs! Make sure development is done and tested in `Python >= 3.6` and make sure to make them mergable to save me and you time :).
 
