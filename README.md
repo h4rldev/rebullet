@@ -84,7 +84,7 @@ $ pip install .
 ## Documentation
 📖 See <a href="./DOCUMENTATION.md"> Documentation</a>.
 
-> Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`, `SlidePrompt`, `Scrollbar`.
+> Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`, `SlidePrompt`, `Scrollbar`, `Date`, `CheckDependencies`.
 
 ## Contributing
 🎉 Directly send PRs! Make sure development is done and tested in `Python >= 3.6` <br> 
