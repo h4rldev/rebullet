@@ -7,7 +7,7 @@
 <a target="_blank"><img src="https://img.shields.io/badge/platform-linux-lightgrey.svg"></a>
 <a target="_blank" href="https://www.python.org/downloads/" title="Python version"><img src="https://img.shields.io/badge/python-%3E=_3.6-green.svg"></a>
 <a target="_blank" href="https://opensource.org/licenses/MIT" title="License: MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
-<a target="_blank" href="http://makeapullrequest.com" title="PRs Wanted"><img src="https://img.shields.io/badge/PRs-wanted-brightgreen.svg"></a>
+<a target="_blank" href="http://makeapullrequest.com" title="PRs Wanted"><img src="https://img.shields.io/badge/PRs-requested-brightgreen.svg"></a>
 </p>
 
 ***
