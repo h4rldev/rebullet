@@ -13,7 +13,7 @@
 > 🎨 Customize prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, styling, and etc. Also supports emojis!
 ***
 
-# This REPO requires maintainers since I won't be working on it anytime soon since I am not experienced in python.
+# This REPO requires maintainers since I won't be working on it anytime soon.
 
 <p align="center">
     <img src="./assets/gifs/demo.gif" width=800>
