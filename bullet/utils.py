@@ -58,10 +58,10 @@ def getchar():
        ord(c) == INTERRUPT_KEY  or \
        ord(c) == NEWLINE_KEY:
        return c
-    
+
     elif ord(c) == BACK_SPACE_KEY or ord(c) == BACK_SPACE_CHAR:
         return c
-    
+
     elif ord(c) == ESC_KEY:
         combo = mygetc()
         if ord(combo) == MOD_KEY_INT:
@@ -99,7 +99,7 @@ def moveCursorLeft(n):
 def moveCursorRight(n):
     ''' Move cursor right n columns. '''
     forceWrite("\033[{}C".format(n))
-    
+
 def moveCursorUp(n):
     ''' Move cursor up n rows. '''
     forceWrite("\033[{}A".format(n))
@@ -116,15 +116,15 @@ def clearLine():
     ''' Clear content of one line on the console. '''
     forceWrite(" " * COLUMNS)
     moveCursorHead()
-    
+
 def clearConsoleUp(n):
-    ''' Clear n console rows (bottom up). ''' 
+    ''' Clear n console rows (bottom up). '''
     for _ in range(n):
         clearLine()
         moveCursorUp(1)
 
 def clearConsoleDown(n):
-    ''' Clear n console rows (top down). ''' 
+    ''' Clear n console rows (top down). '''
     for _ in range(n):
         clearLine()
         moveCursorDown(1)
@@ -136,9 +136,9 @@ def forceWrite(s, end = ''):
     sys.stdout.flush()
 
 def cprint(
-        s: str, 
-        color: str = colors.foreground["default"], 
-        on: str = colors.background["default"], 
+        s: str,
+        color: str = colors.foreground["default"],
+        on: str = colors.background["default"],
         end: str = '\n'
     ):
     ''' Colored print function.
@@ -146,7 +146,7 @@ def cprint(
         s: The string to be printed.
         color: The color of the string.
         on: The color of the background.
-        end: Last character appended. 
+        end: Last character appended.
     Returns:
         None
     '''
