@@ -26,7 +26,7 @@ REVERSE = "\u001b[7m"
 RESET_REVERSE = "\u001b[27m"
 
 RESET = "\u001b[0m"
-    
+
 def bright(color):
     return color[:-1] + ";1m"
 
