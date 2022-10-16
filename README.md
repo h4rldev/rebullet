@@ -1,4 +1,4 @@
-# `bullet` : Beautiful Python Prompts Made Simple
+# `rebullet` : Beautiful Python Prompts Made Simple
 <p align=center>
 <br><br><br>
 <img src="./assets/icon.png" width="400">
@@ -75,7 +75,7 @@
 > 🔢 Numbers
 <img src="./assets/gifs/numbers.gif" width="600"/>
 
-## Setting up `bullet`
+## Setting up `rebullet`
 > Build from Source
 ```shell
 $ git clone https://github.com/h4rldev/bullet-fork
