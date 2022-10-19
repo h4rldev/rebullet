@@ -1,4 +1,4 @@
-# `bullet` : Documentation
+# `rebullet` : Documentation
 <p align=center>
 <br><br><br>
 <img src="./assets/icon.png" width="400"/>
