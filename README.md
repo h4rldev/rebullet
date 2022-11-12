@@ -79,7 +79,7 @@
 ## Setting up `rebullet`
 > Build from Source
 ```shell
-$ git clone https://github.com/h4rldev/bullet-fork
+$ git clone https://github.com/h4rldev/rebullet
 $ cd bullet-fork
 $ pip install .
 ```
