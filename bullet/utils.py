@@ -1,6 +1,5 @@
 import os
 import sys
-import string
 import shutil
 from .charDef import *
 from . import colors
