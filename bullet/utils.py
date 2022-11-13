@@ -1,8 +1,9 @@
 import os
-import sys
 import shutil
-from .charDef import *
+import sys
+
 from . import colors
+from .charDef import *
 
 COLUMNS, _ = shutil.get_terminal_size()  ## Size of console
 
@@ -38,7 +39,8 @@ def mygetc():
         else:
             ch = WIN_CH_BUFFER.pop(0)
     elif os.name == 'posix':
-        import tty, termios
+        import termios
+        import tty
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)
         try:
@@ -52,11 +54,11 @@ def getchar():
     ''' Character input parser. '''
     c = mygetc()
     if ord(c) == LINE_BEGIN_KEY or \
-       ord(c) == LINE_END_KEY   or \
-       ord(c) == TAB_KEY        or \
-       ord(c) == INTERRUPT_KEY  or \
-       ord(c) == NEWLINE_KEY:
-       return c
+        ord(c) == LINE_END_KEY   or \
+        ord(c) == TAB_KEY        or \
+        ord(c) == INTERRUPT_KEY  or \
+        ord(c) == NEWLINE_KEY:
+        return c
 
     elif ord(c) == BACK_SPACE_KEY or ord(c) == BACK_SPACE_CHAR:
         return c

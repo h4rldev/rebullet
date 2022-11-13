@@ -1,6 +1,7 @@
 from bullet import Check, keyhandler, styles
 from bullet.charDef import NEWLINE_KEY
 
+
 class MinMaxCheck(Check):
     def __init__(self, min_selections=0, max_selections=None, *args, **kwargs):
         super().__init__(*args, **kwargs)

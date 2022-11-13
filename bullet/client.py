@@ -1,15 +1,15 @@
+import re
 import sys
 from collections import defaultdict
 from datetime import date
+
 from dateutil import parser as date_parser
+
+from . import colors, cursor, keyhandler, utils
 from .charDef import *
-from .wrap_text import wrap_text
-from . import colors
-from . import utils
-from . import cursor
-from . import keyhandler
 from .exceptions import MissingDependenciesError
-import re
+from .wrap_text import wrap_text
+
 
 # Reusable private utility class
 class myInput:
@@ -84,15 +84,15 @@ class myInput:
                 utils.forceWrite('\n')
                 return self.getInput()
             elif i == LINE_BEGIN_KEY or \
-                 i == HOME_KEY       or \
-                 i == LINE_END_KEY   or \
-                 i == END_KEY        or \
-                 i == ARROW_UP_KEY   or \
-                 i == ARROW_DOWN_KEY or \
-                 i == PG_UP_KEY      or \
-                 i == PG_DOWN_KEY    or \
-                 i == TAB_KEY        or \
-                 i == UNDEFINED_KEY:
+                i == HOME_KEY       or \
+                i == LINE_END_KEY   or \
+                i == END_KEY        or \
+                i == ARROW_UP_KEY   or \
+                i == ARROW_DOWN_KEY or \
+                i == PG_UP_KEY      or \
+                i == PG_DOWN_KEY    or \
+                i == TAB_KEY        or \
+                i == UNDEFINED_KEY:
                 return
             elif i == BACK_SPACE_KEY or i == BACK_SPACE_CHAR:
                 if self.moveCursor(self.pos - 1):

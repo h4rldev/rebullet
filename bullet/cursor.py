@@ -1,11 +1,12 @@
-import sys, os
+import os
+import sys
 from contextlib import contextmanager
 
 # Show and hide cursors
 
 if os.system == 'nt':
-    import msvcrt
     import ctypes
+    import msvcrt
 
     class _CursorInfo(ctypes.Structure):
         _fields_ = [("size", ctypes.c_int),

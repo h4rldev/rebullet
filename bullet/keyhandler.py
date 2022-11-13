@@ -1,5 +1,6 @@
-from .charDef import UNDEFINED_KEY
 from . import utils
+from .charDef import UNDEFINED_KEY
+
 
 def register(key):
     '''

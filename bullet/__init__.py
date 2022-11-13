@@ -1,11 +1,2 @@
-from .client import Bullet
-from .client import Check
-from .client import CheckDependencies
-from .client import YesNo
-from .client import Input
-from .client import Password
-from .client import Numbers
-from .client import VerticalPrompt
-from .client import SlidePrompt
-from .client import ScrollBar
-from .client import Date
+from .client import (Bullet, Check, CheckDependencies, Date, Input, Numbers,
+                    Password, ScrollBar, SlidePrompt, VerticalPrompt, YesNo)
