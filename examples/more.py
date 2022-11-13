@@ -1,6 +1,4 @@
-from bullet import Bullet
-from bullet import Check
-from bullet import styles
+from bullet import Bullet, Check, styles
 
 client = Check(
     prompt = "Choose from a list: ",

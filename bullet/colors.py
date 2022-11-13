@@ -29,4 +29,3 @@ RESET = "\u001b[0m"
 
 def bright(color):
     return color[:-1] + ";1m"
-

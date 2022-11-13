@@ -1,6 +1,6 @@
 import sys
 
-# Keyboard mapping macros 
+# Keyboard mapping macros
 
 LINE_BEGIN_KEY  = 1
 LINE_END_KEY    = 5

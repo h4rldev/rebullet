@@ -1,6 +1,5 @@
-from bullet import Bullet, SlidePrompt, Check, Input, YesNo, Numbers
-from bullet import styles
-from bullet import colors
+from bullet import (Bullet, Check, Input, Numbers, SlidePrompt, YesNo, colors,
+                    styles)
 
 cli = SlidePrompt(
     [
@@ -14,8 +13,8 @@ cli = SlidePrompt(
             word_color = colors.foreground["yellow"]),
         Input("Really? ",
             word_color = colors.foreground["yellow"]),
-        Numbers("How old are you? ", 
-            word_color = colors.foreground["yellow"], 
+        Numbers("How old are you? ",
+            word_color = colors.foreground["yellow"],
             type = int),
         Bullet("What is your favorite programming language? ",
             choices = ["C++", "Python", "Javascript", "Not here!"],
@@ -28,14 +27,14 @@ cli = SlidePrompt(
             word_on_switch = colors.foreground["white"]
         ),
         Check("What food do you like? ",
-            choices = ["🍣   Sushi", 
-                       "🍜   Ramen",
-                       "🌭   Hotdogs", 
-                       "🍔   Hamburgers", 
-                       "🍕   Pizza",
-                       "🍝   Spaghetti",
-                       "🍰   Cakes",
-                       "🍩   Donuts"],
+            choices = ["🍣   Sushi",
+                        "🍜   Ramen",
+                        "🌭   Hotdogs",
+                        "🍔   Hamburgers",
+                        "🍕   Pizza",
+                        "🍝   Spaghetti",
+                        "🍰   Cakes",
+                        "🍩   Donuts"],
             check = " √",
             margin = 2,
             check_color = colors.bright(colors.foreground["red"]),

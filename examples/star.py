@@ -1,11 +1,10 @@
-from bullet import Bullet
-from bullet import colors
+from bullet import Bullet, colors
 
 cli = Bullet(
         prompt = "\nPlease choose a fruit: ",
-        choices = ["apple", "banana", "orange", "watermelon", "strawberry"], 
+        choices = ["apple", "banana", "orange", "watermelon", "strawberry"],
         indent = 0,
-        align = 5, 
+        align = 5,
         margin = 2,
         bullet = "★",
         bullet_color=colors.bright(colors.foreground["cyan"]),

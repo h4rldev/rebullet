@@ -1,7 +1,7 @@
 from . import colors
 
 Example = {
-    "choices" : ["Item {}".format(i) for i in range(1, 6)], 
+    "choices" : ["Item {}".format(i) for i in range(1, 6)],
     "margin" : 2,
     "pad_right" : 5,
     "align" : 5,

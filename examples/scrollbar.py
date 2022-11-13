@@ -1,9 +1,7 @@
-from bullet import ScrollBar
-from bullet import emojis
-from bullet import colors
+from bullet import ScrollBar, colors, emojis
 
 cli = ScrollBar(
-    "How are you feeling today? ", 
+    "How are you feeling today? ",
     emojis.feelings[0],
     height = 5,
     align = 5,
