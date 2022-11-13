@@ -1,3 +1,5 @@
+"""Colors Strings"""
+
 foreground = {
     "black"  : "\u001b[30m",
     "red"    : "\u001b[31m",
@@ -28,4 +30,5 @@ RESET_REVERSE = "\u001b[27m"
 RESET = "\u001b[0m"
 
 def bright(color):
+    """Colors brightness define"""
     return color[:-1] + ";1m"

@@ -1,3 +1,5 @@
+"""Check imports"""
+
 from bullet import Check, keyhandler, styles
 from bullet.charDef import NEWLINE_KEY
 

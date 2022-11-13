@@ -1,3 +1,5 @@
+"""Keyhandler imports"""
+
 from . import utils
 from .charDef import UNDEFINED_KEY
 

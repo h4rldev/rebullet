@@ -27,6 +27,7 @@
 ## Bullet-lists and checkboxes
 
 > 🎨 Robust support for user-defined styles.
+
 <table>
     <tr>
         <th>./examples/classic.py</th>
@@ -71,12 +72,15 @@
 ## Other input prompts
 
 > ⛔ Passwords
+
 <img src="./assets/gifs/password.gif" width="600"/>
 
 > 👍 Yes/No Questions
+
 <img src="./assets/gifs/yesno.gif" width="600"/>
 
 > 🔢 Numbers
+
 <img src="./assets/gifs/numbers.gif" width="600"/>
 
 ## Setting up `rebullet`
@@ -91,11 +95,16 @@ pip install .
 
 ## Documentation
 
-📖 See <a href="./DOCUMENTATION.md"> Documentation</a>.
+📖 See
+
+<a href="./DOCUMENTATION.md"> Documentation</a>.
 
 > Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`, `SlidePrompt`, `Scrollbar`, `Date`, `CheckDependencies`.
 
 ## Contributing
 
-🎉 Directly send PRs! Make sure development is done and tested in `Python >= 3.6` <br>
+🎉 Directly send PRs! Make sure development is done and tested in `Python >= 3.6`
+
+<br>
+
 ❗  Make sure to make them mergable to save me and you time.

@@ -1,3 +1,5 @@
+"""Scrollbar imports"""
+
 from bullet import ScrollBar, colors, emojis
 
 cli = ScrollBar(
