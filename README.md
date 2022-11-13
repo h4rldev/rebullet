@@ -16,86 +16,95 @@
 > 🎨 Customize prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, styling, and etc. Also supports emojis!
 ***
 
-# This REPO requires maintainers since I won't be working on it anytime soon
+## This REPO requires maintainers since I won't be working on it anytime soon
 
-<p align="center">
-    <img src="./assets/gifs/demo.gif" width=800>
-</p>
+    <p align="center">
+        <img src="./assets/gifs/demo.gif" width=800>
+    </p>
 
 > See the sample code for the above demo in `./examples/prompt.py`.
 
 ## Bullet-lists and checkboxes
 
 > 🎨 Robust support for user-defined styles.
-<table>
-    <tr>
-        <th>./examples/classic.py</th>
-        <th>./examples/colorful.py</th>
-        <th>./examples/star.py</th>
-    </tr>
-    <tr>
-        <td><img src="./assets/gifs/classic.gif" width="200"/></td>
-        <td><img src="./assets/gifs/colorful.gif" width="200"/></td>
-        <td><img src="./assets/gifs/star.gif" width="200"/></td>
-    </tr>
-    <tr>
-        <th>Vanilla checkbox</th>
-        <th>Checkbox + styles.Exam</th>
-        <th>Bullet + styles.Greece</th>
-    </tr>
-    <tr>
-        <td><img src="./assets/gifs/checkbox.gif" width="200"/></td>
-        <td><img src="./assets/gifs/exam.gif" width="200"/></td>
-        <td><img src="./assets/gifs/greece.gif" width="200"/></td>
-    </tr>
-    <tr>
-        <th>Bullet + styles.Ocean</th>
-        <th>Bullet + styles.Lime</th>
-        <th>Bullet + styles.Christmas</th>
-    </tr>
-    <tr>
-        <td><img src="./assets/gifs/ocean.gif" width="200"/></td>
-        <td><img src="./assets/gifs/lime.gif" width="200"/></td>
-        <td><img src="./assets/gifs/christmas.gif" width="200"/></td>
-    </tr>
-</table>
+
+    <table>
+        <tr>
+            <th>./examples/classic.py</th>
+            <th>./examples/colorful.py</th>
+            <th>./examples/star.py</th>
+        </tr>
+        <tr>
+            <td><img src="./assets/gifs/classic.gif" width="200"/></td>
+            <td><img src="./assets/gifs/colorful.gif" width="200"/></td>
+            <td><img src="./assets/gifs/star.gif" width="200"/></td>
+        </tr>
+        <tr>
+            <th>Vanilla checkbox</th>
+            <th>Checkbox + styles.Exam</th>
+            <th>Bullet + styles.Greece</th>
+        </tr>
+        <tr>
+            <td><img src="./assets/gifs/checkbox.gif" width="200"/></td>
+            <td><img src="./assets/gifs/exam.gif" width="200"/></td>
+            <td><img src="./assets/gifs/greece.gif" width="200"/></td>
+        </tr>
+        <tr>
+            <th>Bullet + styles.Ocean</th>
+            <th>Bullet + styles.Lime</th>
+            <th>Bullet + styles.Christmas</th>
+        </tr>
+        <tr>
+            <td><img src="./assets/gifs/ocean.gif" width="200"/></td>
+            <td><img src="./assets/gifs/lime.gif" width="200"/></td>
+            <td><img src="./assets/gifs/christmas.gif" width="200"/></td>
+        </tr>
+    </table>
 
 ## ScrollBar
 
-<p align="center">
-    <img src="./assets/gifs/scrollbar.gif" width=400>
-</p>
+    <p align="center">
+        <img src="./assets/gifs/scrollbar.gif" width=400>
+    </p>
 
 > See the sample code for the above demo in `./examples/scrollbar.py`.
 
 ## Other input prompts
 
 > ⛔ Passwords
-<img src="./assets/gifs/password.gif" width="600"/>
+
+    <img src="./assets/gifs/password.gif" width="600"/>
 
 > 👍 Yes/No Questions
-<img src="./assets/gifs/yesno.gif" width="600"/>
+
+    <img src="./assets/gifs/yesno.gif" width="600"/>
 
 > 🔢 Numbers
-<img src="./assets/gifs/numbers.gif" width="600"/>
+
+    <img src="./assets/gifs/numbers.gif" width="600"/>
 
 ## Setting up `rebullet`
 
 > Build from Source
 
-```shell
-git clone https://github.com/h4rldev/rebullet
-cd bullet-fork
-pip install .
-```
+    ```shell
+    git clone https://github.com/h4rldev/rebullet
+    cd bullet-fork
+    pip install .
+    ```
 
 ## Documentation
 
-📖 See <a href="./DOCUMENTATION.md"> Documentation</a>.
+📖 See
+
+    <a href="./DOCUMENTATION.md"> Documentation</a>.
 
 > Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`, `SlidePrompt`, `Scrollbar`, `Date`, `CheckDependencies`.
 
 ## Contributing
 
-🎉 Directly send PRs! Make sure development is done and tested in `Python >= 3.6` <br>
+🎉 Directly send PRs! Make sure development is done and tested in `Python >= 3.6`
+
+    <br>
+
 ❗  Make sure to make them mergable to save me and you time.
