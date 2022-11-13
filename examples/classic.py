@@ -1,3 +1,5 @@
+"""Classic imports"""
+
 from bullet import Bullet
 
 cli = Bullet(

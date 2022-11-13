@@ -1,3 +1,5 @@
+"""Prompt imports"""
+
 from bullet import (Bullet, Check, Input, Numbers, SlidePrompt, YesNo, colors,
                     styles)
 

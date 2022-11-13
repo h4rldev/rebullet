@@ -1,3 +1,5 @@
+"""charDef imports"""
+
 import sys
 
 # Keyboard mapping macros

@@ -1,3 +1,5 @@
+"""Star imports"""
+
 from bullet import Bullet, colors
 
 cli = Bullet(

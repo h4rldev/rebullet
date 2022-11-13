@@ -74,7 +74,7 @@ from bullet import colors
 
 > 🎨 The following colors (both background and foreground) are supported in `bullets`. Note that `default` is the color of your default terminal.
 
-```
+```text
 default, black, red, green, yellow, blue, magenta, cyan, white
 ```
 

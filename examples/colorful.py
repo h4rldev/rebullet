@@ -1,3 +1,5 @@
+"""Colorful imports"""
+
 from bullet import Bullet, colors
 
 cli = Bullet(

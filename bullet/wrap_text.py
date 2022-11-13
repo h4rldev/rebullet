@@ -1,3 +1,5 @@
+"""Wrap_Text imports"""
+
 import re
 
 WORD_REGEX = re.compile(r"\s?(?P<word>\b\w+\b)\s?")
