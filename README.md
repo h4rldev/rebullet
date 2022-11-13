@@ -1,16 +1,16 @@
 # `rebullet` : Beautiful Python Prompts Made Simple
 
-<p align=center>
-<br><br><br>
-<img src="./assets/icon.png" width="400">
-<br><br><br>
-<a target="_blank"><img src="https://img.shields.io/badge/platform-windows-lightgrey?style=flat-square"></a>
-<a target="_blank"><img src="https://img.shields.io/badge/platform-linux-lightgrey?style=flat-square"></a>
-<a target="_blank" href="https://www.python.org/downloads/" title="Python version"><img src="https://img.shields.io/badge/python-%3E=_3.6-green?style=flat-square"></a>
-<a target="_blank" href="https://opensource.org/licenses/MIT" title="License: MIT"><img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square"></a>
-<a target="_blank" href="http://makeapullrequest.com" title="PRs Wanted"><img src="https://img.shields.io/badge/PRs-wanted-brightgreen?style=flat-square"></a>
-<a target="_blank" href="https://pypi.org/project/rebullet/" title="pypi"><img src="https://img.shields.io/pypi/v/rebullet?style=flat-square"></a>
-</p>
+    <p align=center>
+    <br><br><br>
+    <img src="./assets/icon.png" width="400">
+    <br><br><br>
+    <a target="_blank"><img src="https://img.shields.io/badge/platform-windows-lightgrey?style=flat-square"></a>
+    <a target="_blank"><img src="https://img.shields.io/badge/platform-linux-lightgrey?style=flat-square"></a>
+    <a target="_blank" href="https://www.python.org/downloads/" title="Python version"><img src="https://img.shields.io/badge/python-%3E=_3.6-green?style=flat-square"></a>
+    <a target="_blank" href="https://opensource.org/licenses/MIT" title="License: MIT"><img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square"></a>
+    <a target="_blank" href="http://makeapullrequest.com" title="PRs Wanted"><img src="https://img.shields.io/badge/PRs-wanted-brightgreen?style=flat-square"></a>
+    <a target="_blank" href="https://pypi.org/project/rebullet/" title="pypi"><img src="https://img.shields.io/pypi/v/rebullet?style=flat-square"></a>
+    </p>
 
 ***
 > 🎨 Customize prompts in your Python CLI tool. Extensive support for formatting, colors, background colors, styling, and etc. Also supports emojis!
