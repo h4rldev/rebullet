@@ -1,4 +1,4 @@
-# `Rebullet` : Beautiful Python Prompts Made Simple
+# `rebullet` : Beautiful Python Prompts Made Simple
 
 <p align=center>
 <br><br><br>
