@@ -89,8 +89,14 @@
 
 ```shell
 git clone https://github.com/h4rldev/rebullet
-cd bullet-fork
+cd rebullet
 pip install .
+```
+
+> Install from pypi
+
+```shell
+pip install rebullet
 ```
 
 ## Documentation
