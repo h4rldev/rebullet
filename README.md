@@ -101,9 +101,7 @@ pip install rebullet
 
 ## Documentation
 
-📖 See
-
-<a href="./DOCUMENTATION.md"> Documentation</a>.
+📖 See <a href="./DOCUMENTATION.md"> Documentation</a>.
 
 > Currently supported prompts: `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`, `SlidePrompt`, `Scrollbar`, `Date`, `CheckDependencies`.
 
