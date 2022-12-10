@@ -230,21 +230,7 @@
     "MD042": true,
 
     // MD043/required-headings/required-headers - Required heading structure
-    "MD043": {
-        // List of headings
-        "headings": [
-            "# `Rebullet` : Beautiful Python Prompts Made Simple",
-            "## This REPO requires maintainers since I won't be working on it anytime soon",
-            "## Bullet-lists and checkboxes",
-            "## ScrollBar",
-            "## Other input prompts",
-            "## Setting up `rebullet`",
-            "## Documentation",
-            "## Contributing"
-        ],
-        // List of headings
-        "headers": []
-    },
+    "MD043": false,
 
     // MD044/proper-names - Proper names should have the correct capitalization
     "MD044": {
