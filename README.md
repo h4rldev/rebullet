@@ -14,6 +14,8 @@
 <img src="https://img.shields.io/badge/PRs-wanted-brightgreen?style=flat-square"></a>
 <a target="_blank" href="https://pypi.org/project/rebullet/" title="pypi">
 <img src="https://img.shields.io/pypi/v/rebullet?style=flat-square"></a>
+<a target="_blank" href="https://www.codefactor.io/repository/github/h4rldev/rebullet/">
+<img src="https://img.shields.io/codefactor/grade/github/h4rldev/rebullet?style=flat-square"></a>
 </p>
 
 ***
