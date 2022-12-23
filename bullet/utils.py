@@ -56,9 +56,9 @@ def getchar():
     ''' Character input parser. '''
     c = mygetc()
     if ord(c) == LINE_BEGIN_KEY or \
-        ord(c) == LINE_END_KEY   or \
-        ord(c) == TAB_KEY        or \
-        ord(c) == INTERRUPT_KEY  or \
+        ord(c) == LINE_END_KEY or \
+        ord(c) == TAB_KEY or \
+        ord(c) == INTERRUPT_KEY or \
         ord(c) == NEWLINE_KEY:
         return c
 
