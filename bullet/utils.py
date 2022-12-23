@@ -55,41 +55,47 @@ def mygetc():
 def getchar():
     ''' Character input parser. '''
     c = mygetc()
-    if ord(c) == LINE_BEGIN_KEY or \
-        ord(c) == LINE_END_KEY or \
-        ord(c) == TAB_KEY or \
-        ord(c) == INTERRUPT_KEY or \
-        ord(c) == NEWLINE_KEY:
-        return c
+    match ord(c):
+        case LINE_BEGIN_KEY:
+            return c
+        case LINE_END_KEY:
+            return c
+        case TAB_KEY:
+            return c
+        case INTERRUPT_KEY:
+            return c
+        case NEWLINE_KEY:
+            return c
+        case BACK_SPACE_KEY:
+            return c
+        case BACK_SPACE_CHAR:
+            return c
 
-    elif ord(c) == BACK_SPACE_KEY or ord(c) == BACK_SPACE_CHAR:
-        return c
-
-    elif ord(c) == ESC_KEY:
-        combo = mygetc()
-        if ord(combo) == MOD_KEY_INT:
-            key = mygetc()
-            if ord(key) >= MOD_KEY_BEGIN - MOD_KEY_FLAG and ord(key) <= MOD_KEY_END - MOD_KEY_FLAG:
-                if ord(key) in (HOME_KEY - MOD_KEY_FLAG, END_KEY - MOD_KEY_FLAG):
-                    return chr(ord(key) + MOD_KEY_FLAG)
-                else:
-                    trail = mygetc()
-                    if ord(trail) == MOD_KEY_DUMMY:
+        case ESC_KEY:
+            combo = mygetc()
+            if ord(combo) == MOD_KEY_INT:
+                key = mygetc()
+                if ord(key) >= MOD_KEY_BEGIN - MOD_KEY_FLAG and ord(key) <= MOD_KEY_END - MOD_KEY_FLAG:
+                    if ord(key) in (HOME_KEY - MOD_KEY_FLAG, END_KEY - MOD_KEY_FLAG):
                         return chr(ord(key) + MOD_KEY_FLAG)
                     else:
-                        return UNDEFINED_KEY
-            elif ARROW_KEY_BEGIN - ARROW_KEY_FLAG <= ord(key) <= ARROW_KEY_END - ARROW_KEY_FLAG:
-                return chr(ord(key) + ARROW_KEY_FLAG)
+                        trail = mygetc()
+                        if ord(trail) == MOD_KEY_DUMMY:
+                            return chr(ord(key) + MOD_KEY_FLAG)
+                        else:
+                            return UNDEFINED_KEY
+                elif ARROW_KEY_BEGIN - ARROW_KEY_FLAG <= ord(key) <= ARROW_KEY_END - ARROW_KEY_FLAG:
+                    return chr(ord(key) + ARROW_KEY_FLAG)
+                else:
+                    return UNDEFINED_KEY
+            else:
+                return getchar()
+
+        case _:
+            if is_printable(c):
+                return c
             else:
                 return UNDEFINED_KEY
-        else:
-            return getchar()
-
-    else:
-        if is_printable(c):
-            return c
-        else:
-            return UNDEFINED_KEY
 
     return UNDEFINED_KEY
 
