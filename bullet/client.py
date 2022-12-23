@@ -653,7 +653,7 @@ class Numbers:
         if default is not None:
             try:
                 self.type(default)
-            except:
+            except Exception:
                 raise ValueError("`default` should be a " + str(self.type))
         my_input = myInput(word_color = self.word_color)
         utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + colors.RESET)
