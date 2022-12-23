@@ -1,9 +1,4 @@
-In "examples":
-    prompt.py
-    more.py
-    check.py
-
-In "bullet":
+In rebullet:
     wrap_text.py
     utils.py
     keyhandler.py
