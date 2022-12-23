@@ -82,55 +82,68 @@ class myInput:
             c = utils.getchar()
             i = c if c == UNDEFINED_KEY else ord(c)
 
-            if i == NEWLINE_KEY:
-                utils.forceWrite('\n')
-                return self.getInput()
-            elif i == LINE_BEGIN_KEY or \
-                i == HOME_KEY       or \
-                i == LINE_END_KEY   or \
-                i == END_KEY        or \
-                i == ARROW_UP_KEY   or \
-                i == ARROW_DOWN_KEY or \
-                i == PG_UP_KEY      or \
-                i == PG_DOWN_KEY    or \
-                i == TAB_KEY        or \
-                i == UNDEFINED_KEY:
-                return
-            elif i == BACK_SPACE_KEY or i == BACK_SPACE_CHAR:
-                if self.moveCursor(self.pos - 1):
+            match i:
+                case NEWLINE_KEY:
+                    utils.forceWrite('\n')
+                    return self.getInput()
+                case LINE_BEGIN_KEY:
+                    return
+                case HOME_KEY:
+                    return
+                case LINE_END_KEY:
+                    return
+                case END_KEY:
+                    return
+                case ARROW_UP_KEY:
+                    return
+                case ARROW_DOWN_KEY:
+                    return
+                case PG_UP_KEY:
+                    return
+                case PG_DOWN_KEY:
+                    return
+                case TAB_KEY:
+                    return
+                case UNDEFINED_KEY:
+                    return
+                case BACK_SPACE_KEY:
+                    if self.moveCursor(self.pos - 1):
+                        self.deleteChar()
+                case BACK_SPACE_CHAR:
+                    if self.moveCursor(self.pos - 1):
+                        self.deleteChar()
+                case DELETE_KEY:
                     self.deleteChar()
-            elif i == DELETE_KEY:
-                self.deleteChar()
-            elif i == ARROW_RIGHT_KEY:
-                self.moveCursor(self.pos + 1)
-            elif i == ARROW_LEFT_KEY:
-                self.moveCursor(self.pos - 1)
-            else:
-                if self.password:
-                    if c != ' ':
+                case ARROW_RIGHT_KEY:
+                    self.moveCursor(self.pos + 1)
+                case ARROW_LEFT_KEY:
+                    self.moveCursor(self.pos - 1)
+                case _:
+                    if self.password:
+                        if c != ' ':
+                            self.insertChar(c)
+                    else:
                         self.insertChar(c)
-                else:
-                    self.insertChar(c)
 
 @keyhandler.init
 class Bullet:
     def __init__(
             self,
-            prompt: str               = "",
-            choices: list             = [],
-            bullet: str               = "●",
-            prompt_color: str         = colors.foreground["default"],
-            bullet_color: str         = colors.foreground["default"],
-            word_color: str           = colors.foreground["default"],
-            word_on_switch: str       = colors.REVERSE,
-            background_color: str     = colors.background["default"],
+            prompt: str = "",
+            choices: list = None,
+            bullet: str = "●",
+            prompt_color: str = colors.foreground["default"],
+            bullet_color: str = colors.foreground["default"],
+            word_color: str = colors.foreground["default"],
+            word_on_switch: str = colors.REVERSE,
+            background_color: str = colors.background["default"],
             background_on_switch: str = colors.REVERSE,
-            pad_right                 = 0,
-            indent: int               = 0,
-            align                     = 0,
-            margin: int               = 0,
-            shift: int                = 0,
-            return_index: bool        = False
+            pad_right = 0,
+            indent: int = 0,
+            align = 0,
+            margin: int = 0,
+            shift: int = 0,
+            return_index: bool = False
         ):
 
         if not choices:
@@ -260,22 +273,22 @@ class Bullet:
 class Check:
     def __init__(
             self,
-            prompt: str               = "",
-            choices: list             = [],
-            check: str                = "√",
-            prompt_color: str         = colors.foreground["default"],
-            check_color: str          = colors.foreground["default"],
-            check_on_switch: str      = colors.REVERSE,
-            word_color: str           = colors.foreground["default"],
-            word_on_switch: str       = colors.REVERSE,
-            background_color: str     = colors.background["default"],
+            prompt: str = "",
+            choices: list = None,
+            check: str = "√",
+            prompt_color: str = colors.foreground["default"],
+            check_color: str = colors.foreground["default"],
+            check_on_switch: str = colors.REVERSE,
+            word_color: str = colors.foreground["default"],
+            word_on_switch: str = colors.REVERSE,
+            background_color: str = colors.background["default"],
             background_on_switch: str = colors.REVERSE,
-            pad_right                 = 0,
-            indent: int               = 0,
-            align                     = 0,
-            margin: int               = 0,
-            shift: int                = 0,
-            return_index: bool        = False
+            pad_right = 0,
+            indent: int = 0,
+            align = 0,
+            margin: int = 0,
+            shift: int = 0,
+            return_index: bool = False
         ):
 
         if not choices:
@@ -493,12 +506,12 @@ class CheckDependencies(Check):
 class YesNo:
     def __init__(
             self,
-            prompt: str             = "",
-            default: str            = "y",
-            indent: int             = 0,
-            prompt_color: str       = colors.foreground["default"],
-            word_color: str         = colors.foreground["default"],
-            prompt_prefix: str      = "[y/n] "
+            prompt: str = "",
+            default: str = "y",
+            indent: int = 0,
+            prompt_color: str = colors.foreground["default"],
+            word_color: str = colors.foreground["default"],
+            prompt_prefix: str = "[y/n] "
         ):
         self.indent = indent
         if not prompt:
@@ -537,13 +550,13 @@ class YesNo:
 class Input:
     def __init__(
             self,
-            prompt : str               = "",
-            default: str               = "",
-            indent: int                = 0,
-            prompt_color: str          = colors.foreground["default"],
-            word_color: str            = colors.foreground["default"],
-            strip: bool                = False,
-            pattern: str               = ""
+            prompt : str = "",
+            default: str = "",
+            indent: int = 0,
+            prompt_color: str = colors.foreground["default"],
+            word_color: str = colors.foreground["default"],
+            strip: bool = False,
+            pattern: str = ""
         ):
         self.indent = indent
         if not prompt:
@@ -590,11 +603,11 @@ class Input:
 class Password:
     def __init__(
             self,
-            prompt: str              = "",
-            indent: int              = 0,
-            hidden: str              = '*',
-            prompt_color: str        = colors.foreground["default"],
-            word_color: str          = colors.foreground["default"]
+            prompt: str = "",
+            indent: int = 0,
+            hidden: str = '*',
+            prompt_color: str = colors.foreground["default"],
+            word_color: str = colors.foreground["default"]
         ):
         self.indent = indent
         self.prompt_color = prompt_color
@@ -611,10 +624,10 @@ class Password:
 class Numbers:
     def __init__(
             self,
-            prompt: str              = "",
-            indent: int              = 0,
-            prompt_color: str        = colors.foreground["default"],
-            word_color: str          = colors.foreground["default"],
+            prompt: str = "",
+            indent: int = 0,
+            prompt_color: str = colors.foreground["default"],
+            word_color: str = colors.foreground["default"],
             type = float
         ):
         self.indent = indent
@@ -629,7 +642,7 @@ class Numbers:
         try:
             self.type(ans)
             return True
-        except:
+        except Exception:
             utils.moveCursorUp(1)
             utils.forceWrite(' ' * self.indent + self.prompt_color + self.prompt + colors.RESET)
             utils.forceWrite(' ' * len(ans))
@@ -689,25 +702,25 @@ class VerticalPrompt:
 class ScrollBar:
     def __init__(
             self,
-            prompt: str               = "",
-            choices: list             = [],
-            pointer                   = "→",
-            up_indicator: str         = "↑",
-            down_indicator: str       = "↓",
-            prompt_color: str         = colors.foreground["default"],
-            pointer_color: str        = colors.foreground["default"],
-            indicator_color: str      = colors.foreground["default"],
-            word_color: str           = colors.foreground["default"],
-            word_on_switch: str       = colors.REVERSE,
-            background_color: str     = colors.background["default"],
+            prompt: str = "",
+            choices: list = None,
+            pointer = "→",
+            up_indicator: str = "↑",
+            down_indicator: str = "↓",
+            prompt_color: str = colors.foreground["default"],
+            pointer_color: str = colors.foreground["default"],
+            indicator_color: str = colors.foreground["default"],
+            word_color: str = colors.foreground["default"],
+            word_on_switch: str = colors.REVERSE,
+            background_color: str = colors.background["default"],
             background_on_switch: str = colors.REVERSE,
-            pad_right                 = 0,
-            indent: int               = 0,
-            align                     = 0,
-            margin: int               = 0,
-            shift: int                = 0,
-            height                    = None,
-            return_index: bool        = False
+            pad_right = 0,
+            indent: int = 0,
+            align = 0,
+            margin: int = 0,
+            shift: int = 0,
+            height = None,
+            return_index: bool = False
         ):
 
         if not choices:
@@ -949,10 +962,10 @@ class Date(Input):
     def __init__(
         self,
         prompt: str,
-        default: date     = None,
-        format_str: str   = "%m/%d/%Y",
-        indent: int       = 0,
-        word_color: str   = colors.foreground["default"],
+        default: date = None,
+        format_str: str = "%m/%d/%Y",
+        indent: int = 0,
+        word_color: str = colors.foreground["default"],
     ):
         if default:
             default = default.strftime(format_str)
