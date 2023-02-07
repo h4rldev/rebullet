@@ -3,11 +3,10 @@
 import sys
 
 # Keyboard mapping macros
-
 LINE_BEGIN_KEY = 1
 LINE_END_KEY = 5
-TAB_KEY = ord('\t')
-NEWLINE_KEY = 13 # Could be platform dependent. Advised to check
+TAB_KEY = ord("\t")
+NEWLINE_KEY = 13  # Could be platform dependent. Advised to check
 ESC_KEY = 27
 BACK_SPACE_KEY = 127
 ARROW_KEY_FLAG = 1 << 8
@@ -32,7 +31,7 @@ MOD_KEY_DUMMY = 126
 UNDEFINED_KEY = sys.maxsize
 BEEP_CHAR = 7
 BACK_SPACE_CHAR = 8
-SPACE_CHAR = ord(' ')
+SPACE_CHAR = ord(" ")
 INTERRUPT_KEY = 3
 
 if sys.platform == "win32":
@@ -57,5 +56,5 @@ if sys.platform == "win32":
         b"\xe0I": PG_UP_KEY - MOD_KEY_FLAG,
         b"\x00I": PG_UP_KEY - MOD_KEY_FLAG,
         b"\xe0Q": PG_DOWN_KEY - MOD_KEY_FLAG,
-        b"\x00Q": PG_DOWN_KEY - MOD_KEY_FLAG
-        }
+        b"\x00Q": PG_DOWN_KEY - MOD_KEY_FLAG,
+    }
