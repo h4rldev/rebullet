@@ -1,7 +1,0 @@
-In rebullet:
-    wrap_text.py
-    utils.py
-    keyhandler.py
-    cursor.py
-    client.py
-    charDef.py
