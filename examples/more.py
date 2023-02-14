@@ -1,6 +1,6 @@
 """More imports"""
 
-from bullet import Bullet, Check, styles
+from bullet import Check, styles
 
 client = Check(
     prompt = "Choose from a list: ",
