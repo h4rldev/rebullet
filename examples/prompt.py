@@ -1,6 +1,6 @@
 """Prompt imports"""
 
-from bullet import (Bullet, Check, Input, Numbers, SlidePrompt, YesNo, colors)
+from rebullet import (Bullet, Check, Input, Numbers, SlidePrompt, YesNo, colors)
 
 cli = SlidePrompt(
     [

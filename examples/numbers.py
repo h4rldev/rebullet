@@ -1,6 +1,6 @@
 """Numbers imports"""
 
-from bullet import Numbers
+from rebullet import Numbers
 
 prompt = Numbers("How old are you? ", type = int)
 prompt.launch()

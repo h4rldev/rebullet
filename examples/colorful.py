@@ -1,6 +1,6 @@
 """Colorful imports"""
 
-from bullet import Bullet, colors
+from rebullet import Bullet, colors
 
 cli = Bullet(
         prompt = "\nPlease choose a fruit: ",

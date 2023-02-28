@@ -1,6 +1,6 @@
 """Classic imports"""
 
-from bullet import Bullet
+from rebullet import Bullet
 
 cli = Bullet(
         prompt = "\nPlease choose a fruit: ",

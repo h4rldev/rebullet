@@ -1,6 +1,6 @@
 """YesNo imports"""
 
-from bullet import YesNo
+from rebullet import YesNo
 
 client = YesNo("Are you a good student? ", default = 'y')
 

@@ -1,6 +1,6 @@
 """Scrollbar imports"""
 
-from bullet import ScrollBar, colors, emojis
+from rebullet import ScrollBar, colors, emojis
 
 cli = ScrollBar(
     "How are you feeling today? ",

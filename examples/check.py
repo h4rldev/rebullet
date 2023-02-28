@@ -1,7 +1,7 @@
 """Check imports"""
 
-from bullet import Check, keyhandler, styles
-from bullet.charDef import NEWLINE_KEY
+from rebullet import Check, keyhandler, styles
+from rebullet.charDef import NEWLINE_KEY
 
 
 class MinMaxCheck(Check):
@@ -18,7 +18,9 @@ class MinMaxCheck(Check):
             return super().accept()
 
     def valid(self):
-        return self.min_selections <= sum(1 for c in self.checked if c) <= self.max_selections
+        return self.min_selections <= sum(
+            1 for c in self.checked if c
+        ) <= self.max_selections
 
 client = MinMaxCheck(
     prompt = "Choose 2 or 3 from the list: ",
