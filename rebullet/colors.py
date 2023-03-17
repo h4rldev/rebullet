@@ -1,4 +1,4 @@
-"""Color Codes"""
+"""Color Codes."""
 
 foreground = {
     "black": "\u001b[30m",
@@ -31,5 +31,5 @@ RESET = "\u001b[0m"
 
 
 def bright(color):
-    """Colors brightness define"""
+    """Colors brightness define."""
     return color[:-1] + ";1m"

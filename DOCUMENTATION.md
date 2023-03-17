@@ -35,14 +35,14 @@
 - [More Customization: Extending Existing Prompts](#topic_18)
   - [A List of Default Keyboard Events](#topic_19)
 
-# General
+## General
 
-## Using `bullet` Objects <a name="topic_1"></a>
+### Using `bullet` Objects <a name="topic_1"></a>
 
 > Always create an UI object with a prompt specified.
 
 ```python
-from bullet import Bullet, Check, YesNo, Input # and etc...
+from rebullet import Bullet, Check, YesNo, Input # and etc...
 cli = Bullet(prompt = "Choose from the items below: ")  # Create a Bullet or Check object
 result = cli.launch()  # Launch a prompt
 ```
@@ -69,7 +69,7 @@ cli = ScrollBar(pointer = "→")
 > It is recommended to EXPLICITLY specify ALL colors for an UI object.
 
 ```python
-from bullet import colors
+from rebullet import colors
 ```
 
 > 🎨 The following colors (both background and foreground) are supported in `bullets`. Note that `default` is the color of your default terminal.
@@ -125,11 +125,11 @@ bright_cyan = colors.bright(colors.foreground["cyan"])
 > 👷 Currently only styles for `Bullet` is supported.
 
 ```python
-from bullet import styles
+from rebullet import styles
 client = Bullet(**styles.Greece)
 ```
 
-# `bullet` Objects
+## `bullet` Objects
 
 ## ⌨️ Using `Bullet` Object<a name="topic_7"></a>
 
@@ -243,7 +243,7 @@ result = cli.launch()
 
 > For `Prompt` ojects, call `summarize()` after launching the prompt to print out user input.
 
-## ⌨️ Using `ScrollBar` Object<a name="topic_18"></a>
+### ⌨️ Using `ScrollBar` Object<a name="topic_18"></a>
 
 > **Enhanced `Bullet`**: Too many items? It's OK!
 
@@ -252,14 +252,14 @@ result = cli.launch()
 - `height`: maximum items rendered on terminal.
   - For example, your can have 100 choices (`len(choices) = 100`) but define `height = 5`.
 
-# More Customization: Extending Existing Prompts<a name="topic_19"></a>
+## More Customization: Extending Existing Prompts<a name="topic_19"></a>
 
 > See `./examples/check.py` for the big picture of what's going on.
 
 In `bullet`, you can easily inherit a base class (existing `bullet` objects) and create your customized prompt. This is done by introducing the `keyhandler` module to register user-defined keyboard events.
 
 ```python
-from bullet import keyhandler
+from rebullet import keyhandler
 ```
 
 Say you want the user to choose at least 1 and at most 3 items from a list of 5 items. You can inherit the `Check` class, and **register** a customized keyboard event as a method.

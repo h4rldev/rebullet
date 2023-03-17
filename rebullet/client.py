@@ -1,4 +1,4 @@
-"""Client imports"""
+"""Client imports."""
 
 import re
 from collections import defaultdict
@@ -20,7 +20,8 @@ class myInput:
         password: bool = False,
         hidden: str = "*",
     ):
-        """Constructor for myInput
+        """Construct for myInput."""
+        """
         Args:
             word_color: color of input characters.
             password: Whether input is password.
@@ -481,7 +482,8 @@ class CheckDependencies(Check):
     """Extend Check to follow dependencies."""
 
     def __init__(self, prompt="", dep_tree=(), *args, **kwargs):
-        """Extract choices from dep_tree.
+        """Extract choices from the dep_tree."""
+        """
         dep_tree expected format:
         (
             ("choice A", ("choice C", "Choice D")),
@@ -499,6 +501,7 @@ class CheckDependencies(Check):
             for d in deps:
                 self.dependants[d].add(k)
         choices = [c[0] for c in dep_tree]
+        # trunk-ignore(ruff/B026)
         super().__init__(prompt=prompt, choices=choices, *args, **kwargs)
 
     def validateDependencies(self, dep_tree):
@@ -566,7 +569,7 @@ class YesNo:
             raise ValueError("Prompt can not be empty!")
         if default.lower() not in ["y", "n"]:
             raise ValueError("`default` can only be 'y' or 'n'!")
-        self.default = "[{}]".format(default.lower())
+        self.default = f"[{default.lower()}]: "
         self.prompt = prompt_prefix + prompt
         self.prompt_color = prompt_color
         self.word_color = word_color
@@ -601,7 +604,7 @@ class YesNo:
         while True:
             ans = my_input.input()
             if ans == "":
-                return self.default.strip("[]") == "y"
+                return self.default.strip("[]: ") == "y"
             if not self.valid(ans):
                 continue
             else:
@@ -735,7 +738,7 @@ class Numbers:
             try:
                 self.type(default)
             except Exception:
-                raise ValueError("`default` should be a " + str(self.type))
+                raise ValueError("`default` should be a " + str(self.type)) from None
         my_input = myInput(word_color=self.word_color)
         utils.forceWrite(
             " " * self.indent + self.prompt_color + self.prompt + colors.RESET
@@ -1065,7 +1068,7 @@ class Date(Input):
     String provided by user can be provided in any format recognized by
     `dateutil.parser`.
 
-    Args:
+    Args:_
         prompt (str): Required. Text to display to user before input prompt.
         default (date): Optional. Default `date` value if user provides no
             input.
@@ -1098,7 +1101,8 @@ class Date(Input):
             except ValueError:
                 error = f"Error! '{result}' could not be parsed as a valid date.\n"
                 help = (
-                    "You can use any format recognized by dateutil.parser. For example, all of "
+                    "You can use any format recognized by dateutil.parser. For example,"
+                    " all of "
                     "the strings below are valid ways to represent the same date:\n"
                 )
                 examples = '\n"2018-5-13" -or- "05/13/2018" -or- "May 13 2018"\n'
