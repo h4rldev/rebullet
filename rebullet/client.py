@@ -570,6 +570,7 @@ class YesNo:
         if default.lower() not in ["y", "n"]:
             raise ValueError("`default` can only be 'y' or 'n'!")
         self.default = f"[{default.lower()}]: "
+        self.default = f"[{default.lower()}]: "
         self.prompt = prompt_prefix + prompt
         self.prompt_color = prompt_color
         self.word_color = word_color
@@ -625,7 +626,7 @@ class Input:
         self.indent = indent
         if not prompt:
             raise ValueError("Prompt can not be empty!")
-        self.default = "[{}]".format(default) if default else ""
+        self.default = f"[{default}]: " if default else ""
         self.prompt = prompt
         self.prompt_color = prompt_color
         self.word_color = word_color
@@ -1101,8 +1102,8 @@ class Date(Input):
             except ValueError:
                 error = f"Error! '{result}' could not be parsed as a valid date.\n"
                 help = (
-                    "You can use any format recognized by dateutil.parser. For example,"
-                    " all of "
+                    "You can use any format recognized by dateutil.parser."
+                    " For example, all of "
                     "the strings below are valid ways to represent the same date:\n"
                 )
                 examples = '\n"2018-5-13" -or- "05/13/2018" -or- "May 13 2018"\n'
