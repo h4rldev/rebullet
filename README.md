@@ -24,7 +24,7 @@
 > Also supports emojis!
 ***
 
-## This REPO requires maintainers since I won't be working on it anytime soon
+## This REPO requires maintainers!
 
 <p align="center">
     <img src="./assets/gifs/demo.gif" width=800>
@@ -93,7 +93,7 @@
 
 ## Setting up `rebullet`
 
-> Build from Source
+> Install from git
 
 ```shell
 git clone https://github.com/h4rldev/rebullet
