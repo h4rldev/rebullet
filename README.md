@@ -24,7 +24,7 @@
 > Also supports emojis!
 ***
 
-## This REPO requires maintainers!
+## This REPO needs maintainers!
 
 <p align="center">
     <img src="./assets/gifs/demo.gif" width=800>
