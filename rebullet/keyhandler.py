@@ -30,6 +30,8 @@ class _KeyHandlerRegisterer(type):
         result = super().__new__(metacls, name, bases, classdict)
         if not hasattr(result, "_key_handler"):
             setattr(result, "_key_handler", {})
+        else: #Create a copy of the _key_handler attribute to avoid inherited classes from changing parent.
+            setattr(result, "_key_handler", getattr(result,"_key_handler").copy())
         setattr(result, "handle_input", _KeyHandlerRegisterer.handle_input)
 
         for value in classdict.values():
