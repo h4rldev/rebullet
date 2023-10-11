@@ -46,7 +46,7 @@ class myInput:
                 self.pos += 1
         else:
             while self.pos != pos:
-                utils.forceWrite("\b")
+                utils.force_write("\b")
                 self.pos -= 1
         return True
 
@@ -63,7 +63,7 @@ class myInput:
             utils.cprint(
                 "".join(self.buffer[self.pos :]), color=self.word_color, end=""
             )
-        utils.forceWrite("\b" * (len(self.buffer) - self.pos - 1))
+        utils.force_write("\b" * (len(self.buffer) - self.pos - 1))
         self.pos += 1
 
     def getInput(self):
@@ -79,10 +79,10 @@ class myInput:
             return
         self.buffer.pop(self.pos)
         if self.hidden:
-            utils.forceWrite(self.hidden * (len(self.buffer) - self.pos) + " ")
+            utils.force_write(self.hidden * (len(self.buffer) - self.pos) + " ")
         else:
-            utils.forceWrite("".join(self.buffer[self.pos :]) + " ")
-        utils.forceWrite("\b" * (len(self.buffer) - self.pos + 1))
+            utils.force_write("".join(self.buffer[self.pos :]) + " ")
+        utils.force_write("\b" * (len(self.buffer) - self.pos + 1))
 
     def input(self):
         while True:
@@ -91,7 +91,7 @@ class myInput:
 
             match i:
                 case char.NEWLINE_KEY:
-                    utils.forceWrite("\n")
+                    utils.force_write("\n")
                     return self.getInput()
                 case char.LINE_BEGIN_KEY:
                     return
@@ -185,10 +185,10 @@ class Bullet:
     def renderBullets(self):
         for i in range(len(self.choices)):
             self.printBullet(i)
-            utils.forceWrite("\n")
+            utils.force_write("\n")
 
     def printBullet(self, idx):
-        utils.forceWrite(" " * (self.indent + self.align))
+        utils.force_write(" " * (self.indent + self.align))
         back_color = (
             self.background_on_switch if idx == self.pos else self.background_color
         )
@@ -211,18 +211,18 @@ class Bullet:
         utils.cprint(
             " " * (self.max_width - len(self.choices[idx])), on=back_color, end=""
         )
-        utils.moveCursorHead()
+        utils.move_cursor_head()
 
     @keyhandler.register(char.ARROW_UP_KEY)
     def moveUp(self):
         if self.pos - 1 < 0:
             return
         else:
-            utils.clearLine()
+            utils.clear_line()
             old_pos = self.pos
             self.pos -= 1
             self.printBullet(old_pos)
-            utils.moveCursorUp(1)
+            utils.move_cursor_up(1)
             self.printBullet(self.pos)
 
     @keyhandler.register(char.ARROW_DOWN_KEY)
@@ -230,38 +230,38 @@ class Bullet:
         if self.pos + 1 >= len(self.choices):
             return
         else:
-            utils.clearLine()
+            utils.clear_line()
             old_pos = self.pos
             self.pos += 1
             self.printBullet(old_pos)
-            utils.moveCursorDown(1)
+            utils.move_cursor_down(1)
             self.printBullet(self.pos)
 
     @keyhandler.register(char.HOME_KEY)
     def moveTop(self):
-        utils.clearLine()
+        utils.clear_line()
         old_pos = self.pos
         self.pos = 0
         self.printBullet(old_pos)
         while old_pos > 0:
-            utils.moveCursorUp(1)
+            utils.move_cursor_up(1)
             old_pos -= 1
         self.printBullet(self.pos)
 
     @keyhandler.register(char.END_KEY)
     def moveBottom(self):
-        utils.clearLine()
+        utils.clear_line()
         old_pos = self.pos
         self.pos = len(self.choices) - 1
         self.printBullet(old_pos)
         while old_pos < len(self.choices) - 1:
-            utils.moveCursorDown(1)
+            utils.move_cursor_down(1)
             old_pos += 1
         self.printBullet(self.pos)
 
     @keyhandler.register(char.NEWLINE_KEY)
     def accept(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
+        utils.move_cursor_down(len(self.choices) - self.pos)
         ret = self.choices[self.pos]
         if self.return_index:
             return ret, self.pos
@@ -270,19 +270,19 @@ class Bullet:
 
     @keyhandler.register(char.INTERRUPT_KEY)
     def interrupt(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
+        utils.move_cursor_down(len(self.choices) - self.pos)
         raise KeyboardInterrupt
 
     def launch(self, default=None):
         if self.prompt:
-            utils.forceWrite(
+            utils.force_write(
                 " " * self.indent
                 + self.prompt_color
                 + self.prompt
                 + colors.RESET
                 + "\n"
             )
-            utils.forceWrite("\n" * self.shift)
+            utils.force_write("\n" * self.shift)
         if default is not None:
             if type(default).__name__ != "int":
                 raise TypeError("'default' should be an integer value!")
@@ -290,7 +290,7 @@ class Bullet:
                 raise ValueError("'default' should be in range [0, len(choices))!")
             self.pos = default
         self.renderBullets()
-        utils.moveCursorUp(len(self.choices) - self.pos)
+        utils.move_cursor_up(len(self.choices) - self.pos)
         with cursor.hide():
             while True:
                 ret = self.handle_input()
@@ -353,10 +353,10 @@ class Check:
     def renderRows(self):
         for i in range(len(self.choices)):
             self.printRow(i)
-            utils.forceWrite("\n")
+            utils.force_write("\n")
 
     def printRow(self, idx):
-        utils.forceWrite(" " * (self.indent + self.align))
+        utils.force_write(" " * (self.indent + self.align))
         back_color = (
             self.background_on_switch if idx == self.pos else self.background_color
         )
@@ -377,7 +377,7 @@ class Check:
         utils.cprint(
             " " * (self.max_width - len(self.choices[idx])), on=back_color, end=""
         )
-        utils.moveCursorHead()
+        utils.move_cursor_head()
 
     @keyhandler.register(char.SPACE_CHAR)
     def toggleRow(self):
@@ -389,11 +389,11 @@ class Check:
         if self.pos - 1 < 0:
             return
         else:
-            utils.clearLine()
+            utils.clear_line()
             old_pos = self.pos
             self.pos -= 1
             self.printRow(old_pos)
-            utils.moveCursorUp(1)
+            utils.move_cursor_up(1)
             self.printRow(self.pos)
 
     @keyhandler.register(char.ARROW_DOWN_KEY)
@@ -401,38 +401,38 @@ class Check:
         if self.pos + 1 >= len(self.choices):
             return
         else:
-            utils.clearLine()
+            utils.clear_line()
             old_pos = self.pos
             self.pos += 1
             self.printRow(old_pos)
-            utils.moveCursorDown(1)
+            utils.move_cursor_down(1)
             self.printRow(self.pos)
 
     @keyhandler.register(char.HOME_KEY)
     def moveTop(self):
-        utils.clearLine()
+        utils.clear_line()
         old_pos = self.pos
         self.pos = 0
         self.printRow(old_pos)
         while old_pos > 0:
-            utils.moveCursorUp(1)
+            utils.move_cursor_up(1)
             old_pos -= 1
         self.printRow(self.pos)
 
     @keyhandler.register(char.END_KEY)
     def moveBottom(self):
-        utils.clearLine()
+        utils.clear_line()
         old_pos = self.pos
         self.pos = len(self.choices) - 1
         self.printRow(old_pos)
         while old_pos < len(self.choices) - 1:
-            utils.moveCursorDown(1)
+            utils.move_cursor_down(1)
             old_pos += 1
         self.printRow(self.pos)
 
     @keyhandler.register(char.NEWLINE_KEY)
     def accept(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
+        utils.move_cursor_down(len(self.choices) - self.pos)
         ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
         ret_idx = [i for i in range(len(self.choices)) if self.checked[i]]
         self.pos = 0
@@ -443,19 +443,19 @@ class Check:
 
     @keyhandler.register(char.INTERRUPT_KEY)
     def interrupt(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
+        utils.move_cursor_down(len(self.choices) - self.pos)
         raise KeyboardInterrupt
 
     def launch(self, default=None):
         if self.prompt:
-            utils.forceWrite(
+            utils.force_write(
                 " " * self.indent
                 + self.prompt_color
                 + self.prompt
                 + colors.RESET
                 + "\n"
             )
-            utils.forceWrite("\n" * self.shift)
+            utils.force_write("\n" * self.shift)
         if default is None:
             default = []
         if default:
@@ -470,7 +470,7 @@ class Check:
             for i in default:
                 self.checked[i] = True
         self.renderRows()
-        utils.moveCursorUp(len(self.choices))
+        utils.move_cursor_up(len(self.choices))
         with cursor.hide():
             while True:
                 ret = self.handle_input()
@@ -543,15 +543,15 @@ class CheckDependencies(Check):
 
     def refresh(self):
         if not self.pos == 0:
-            utils.moveCursorUp(self.pos)
-        utils.clearLine()
+            utils.move_cursor_up(self.pos)
+        utils.clear_line()
         self.printRow(0)
         for pos in range(1, len(self.choices)):
-            utils.moveCursorDown(0)
-            utils.clearLine()
+            utils.move_cursor_down(0)
+            utils.clear_line()
             self.printRow(pos)
         if not self.pos == len(self.choices) - 1:
-            utils.moveCursorUp(len(self.choices) - self.pos - 1)
+            utils.move_cursor_up(len(self.choices) - self.pos - 1)
 
 
 class YesNo:
@@ -581,21 +581,21 @@ class YesNo:
         ans = ans.lower()
         if "yes".startswith(ans) or "no".startswith(ans):
             return True
-        utils.moveCursorUp(self.prompt.count("\n") + 1)
-        utils.forceWrite(
+        utils.move_cursor_up(self.prompt.count("\n") + 1)
+        utils.force_write(
             " " * self.indent
             + self.prompt_color
             + self.prompt
             + self.default
             + colors.RESET
         )
-        utils.forceWrite(" " * len(ans))
-        utils.forceWrite("\b" * len(ans))
+        utils.force_write(" " * len(ans))
+        utils.force_write("\b" * len(ans))
         return False
 
     def launch(self):
         my_input = myInput(word_color=self.word_color)
-        utils.forceWrite(
+        utils.force_write(
             " " * self.indent
             + self.prompt_color
             + self.prompt
@@ -635,15 +635,15 @@ class Input:
 
     def valid(self, ans):
         if not bool(re.match(self.pattern, ans)):
-            utils.moveCursorUp(1)
-            utils.forceWrite(" " * self.indent + self.prompt + self.default)
-            utils.forceWrite(" " * len(ans))
-            utils.forceWrite("\b" * len(ans))
+            utils.move_cursor_up(1)
+            utils.force_write(" " * self.indent + self.prompt + self.default)
+            utils.force_write(" " * len(ans))
+            utils.force_write("\b" * len(ans))
             return False
         return True
 
     def launch(self):
-        utils.forceWrite(
+        utils.force_write(
             " " * self.indent
             + self.prompt_color
             + self.prompt
@@ -658,16 +658,16 @@ class Input:
                     if self.default != "":
                         return self.default[1:-1]
                     else:
-                        utils.moveCursorUp(1)
-                        utils.forceWrite(
+                        utils.move_cursor_up(1)
+                        utils.force_write(
                             " " * self.indent
                             + self.prompt_color
                             + self.prompt
                             + self.default
                             + colors.RESET
                         )
-                        utils.forceWrite(" " * len(result))
-                        utils.forceWrite("\b" * len(result))
+                        utils.force_write(" " * len(result))
+                        utils.force_write("\b" * len(result))
                 else:
                     break
         else:
@@ -696,7 +696,7 @@ class Password:
         self.word_color = word_color
 
     def launch(self):
-        utils.forceWrite(
+        utils.force_write(
             " " * self.indent + self.prompt_color + self.prompt + colors.RESET
         )
         return myInput(
@@ -726,12 +726,12 @@ class Numbers:
             self.type(ans)
             return True
         except Exception:
-            utils.moveCursorUp(1)
-            utils.forceWrite(
+            utils.move_cursor_up(1)
+            utils.force_write(
                 " " * self.indent + self.prompt_color + self.prompt + colors.RESET
             )
-            utils.forceWrite(" " * len(ans))
-            utils.forceWrite("\b" * len(ans))
+            utils.force_write(" " * len(ans))
+            utils.force_write("\b" * len(ans))
             return False
 
     def launch(self, default=None):
@@ -741,7 +741,7 @@ class Numbers:
             except Exception:
                 raise ValueError("`default` should be a " + str(self.type)) from None
         my_input = myInput(word_color=self.word_color)
-        utils.forceWrite(
+        utils.force_write(
             " " * self.indent + self.prompt_color + self.prompt + colors.RESET
         )
         while True:
@@ -782,7 +782,7 @@ class VerticalPrompt:
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
             if not self.separator:
-                utils.forceWrite("\n" * self.spacing)
+                utils.force_write("\n" * self.spacing)
             else:
                 utils.cprint(
                     self.separator * self.separator_len, color=self.separator_color
@@ -857,12 +857,12 @@ class ScrollBar:
 
     def renderRows(self):
         self.printRow(self.top, indicator=self.up_indicator if self.top != 0 else " ")
-        utils.forceWrite("\n")
+        utils.force_write("\n")
 
         i = self.top
         for i in range(self.top + 1, self.top + self.height - 1):
             self.printRow(i)
-            utils.forceWrite("\n")
+            utils.force_write("\n")
 
         if i < len(self.choices) - 1:
             self.printRow(
@@ -871,10 +871,10 @@ class ScrollBar:
                 if self.top + self.height != len(self.choices)
                 else "",
             )
-            utils.forceWrite("\n")
+            utils.force_write("\n")
 
     def printRow(self, idx, indicator=""):
-        utils.forceWrite(" " * (self.indent + self.align))
+        utils.force_write(" " * (self.indent + self.align))
         back_color = (
             self.background_on_switch if idx == self.pos else self.background_color
         )
@@ -899,7 +899,7 @@ class ScrollBar:
             " " * (self.max_width - len(self.choices[idx])), on=back_color, end=""
         )
         utils.cprint(indicator, color=self.indicator_color, end="")
-        utils.moveCursorHead()
+        utils.move_cursor_head()
 
     @keyhandler.register(char.ARROW_UP_KEY)
     def moveUp(self):
@@ -907,12 +907,12 @@ class ScrollBar:
             if self.top == 0:
                 return  # Already reached top-most position
             else:
-                utils.clearConsoleDown(self.height)
+                utils.clear_console_down(self.height)
                 self.pos, self.top = self.pos - 1, self.top - 1
                 self.renderRows()
-                utils.moveCursorUp(self.height)
+                utils.move_cursor_up(self.height)
         else:
-            utils.clearLine()
+            utils.clear_line()
             old_pos = self.pos
             self.pos -= 1
             show_arrow = (
@@ -920,7 +920,7 @@ class ScrollBar:
                 and self.top + self.height < len(self.choices)
             )
             self.printRow(old_pos, indicator=self.down_indicator if show_arrow else "")
-            utils.moveCursorUp(1)
+            utils.move_cursor_up(1)
             self.printRow(self.pos)
 
     @keyhandler.register(char.ARROW_DOWN_KEY)
@@ -929,18 +929,18 @@ class ScrollBar:
             if self.top + self.height == len(self.choices):
                 return
             else:
-                utils.clearConsoleUp(self.height)
-                utils.moveCursorDown(1)
+                utils.clear_console_up(self.height)
+                utils.move_cursor_down(1)
                 self.pos, self.top = self.pos + 1, self.top + 1
                 self.renderRows()
-                utils.moveCursorUp(1)
+                utils.move_cursor_up(1)
         else:
-            utils.clearLine()
+            utils.clear_line()
             old_pos = self.pos
             self.pos += 1
             show_arrow = old_pos == self.top and self.top > 0
             self.printRow(old_pos, indicator=self.up_indicator if show_arrow else "")
-            utils.moveCursorDown(1)
+            utils.move_cursor_down(1)
             self.printRow(self.pos)
 
     @keyhandler.register(char.HOME_KEY)
@@ -951,11 +951,11 @@ class ScrollBar:
             else:
                 pass  # Not at top-most position
         else:
-            utils.moveCursorUp(self.pos - self.top)
-        utils.clearConsoleDown(self.height)
+            utils.move_cursor_up(self.pos - self.top)
+        utils.clear_console_down(self.height)
         self.pos = self.top = 0
         self.renderRows()
-        utils.moveCursorUp(self.height)
+        utils.move_cursor_up(self.height)
 
     @keyhandler.register(char.END_KEY)
     def moveBottom(self):
@@ -965,13 +965,13 @@ class ScrollBar:
             else:
                 pass  # Not already at bottm-most position
         else:
-            utils.moveCursorDown(self.height - (self.pos - self.top + 1))
-        utils.clearConsoleUp(self.height)
-        utils.moveCursorDown(1)
+            utils.move_cursor_down(self.height - (self.pos - self.top + 1))
+        utils.clear_console_up(self.height)
+        utils.move_cursor_down(1)
         self.top = len(self.choices) - self.height
         self.pos = len(self.choices) - 1
         self.renderRows()
-        utils.moveCursorUp(1)
+        utils.move_cursor_up(1)
 
     @keyhandler.register(char.PG_UP_KEY)
     def movePgUp(self):
@@ -981,12 +981,12 @@ class ScrollBar:
             else:
                 pass  # Not at top-most position
         else:
-            utils.moveCursorUp(self.pos - self.top)
-        utils.clearConsoleDown(self.height)
+            utils.move_cursor_up(self.pos - self.top)
+        utils.clear_console_down(self.height)
         self.top = max(0, self.top - self.height)
         self.pos = max(0, self.pos - self.height)
         self.renderRows()
-        utils.moveCursorUp(self.height - (self.pos - self.top))
+        utils.move_cursor_up(self.height - (self.pos - self.top))
 
     @keyhandler.register(char.PG_DOWN_KEY)
     def movePgDown(self):
@@ -994,20 +994,20 @@ class ScrollBar:
             if self.top + self.height == len(self.choices):
                 return  # Already reached bottom-most position
             else:
-                utils.moveCursorDown(self.height - (self.pos - self.top + 1))
+                utils.move_cursor_down(self.height - (self.pos - self.top + 1))
         else:
-            utils.moveCursorDown(self.height - (self.pos - self.top + 1))
-        utils.clearConsoleUp(self.height)
-        utils.moveCursorDown(1)
+            utils.move_cursor_down(self.height - (self.pos - self.top + 1))
+        utils.clear_console_up(self.height)
+        utils.move_cursor_down(1)
         self.top = min(len(self.choices) - self.height, self.top + self.height)
         self.pos = min(len(self.choices) - 1, self.pos + self.height)
         self.renderRows()
-        utils.moveCursorUp(1 + self.height - (self.pos - self.top + 1))
+        utils.move_cursor_up(1 + self.height - (self.pos - self.top + 1))
 
     @keyhandler.register(char.NEWLINE_KEY)
     def accept(self):
         d = self.top + self.height - self.pos
-        utils.moveCursorDown(d)
+        utils.move_cursor_down(d)
         ret = self.choices[self.pos]
         if self.return_index:
             return ret, self.pos
@@ -1017,21 +1017,21 @@ class ScrollBar:
     @keyhandler.register(char.INTERRUPT_KEY)
     def interrupt(self):
         d = self.top + self.height - self.pos
-        utils.moveCursorDown(d)
+        utils.move_cursor_down(d)
         raise KeyboardInterrupt
 
     def launch(self):
         if self.prompt:
-            utils.forceWrite(
+            utils.force_write(
                 " " * self.indent
                 + self.prompt_color
                 + self.prompt
                 + colors.RESET
                 + "\n"
             )
-            utils.forceWrite("\n" * self.shift)
+            utils.force_write("\n" * self.shift)
         self.renderRows()
-        utils.moveCursorUp(self.height)
+        utils.move_cursor_up(self.height)
         with cursor.hide():
             while True:
                 ret = self.handle_input()
@@ -1058,8 +1058,8 @@ class SlidePrompt:
             d = 1
             if type(ui).__name__ == "Bullet" or type(ui).__name__ == "Check":
                 d = 1 + ui.shift + len(ui.choices)
-            utils.clearConsoleUp(d + 1)
-            utils.moveCursorDown(1)
+            utils.clear_console_up(d + 1)
+            utils.move_cursor_down(1)
         return self.result
 
 

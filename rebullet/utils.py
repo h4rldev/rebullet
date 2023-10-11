@@ -93,7 +93,7 @@ def getchar():
                         if ord(trail) == char.MOD_KEY_DUMMY:
                             return chr(ord(key) + char.MOD_KEY_FLAG)
                         else:
-                            return char.UNDEFINED_KEY
+                            return chr(char.UNDEFINED_KEY)
                 elif (
                     char.ARROW_KEY_BEGIN - char.ARROW_KEY_FLAG
                     <= ord(key)
@@ -101,7 +101,7 @@ def getchar():
                 ):
                     return chr(ord(key) + char.ARROW_KEY_FLAG)
                 else:
-                    return char.UNDEFINED_KEY
+                    return chr(char.UNDEFINED_KEY)
             else:
                 return getchar()
 
@@ -109,61 +109,59 @@ def getchar():
             if is_printable(c):
                 return c
             else:
-                return char.UNDEFINED_KEY
-
-    return char.UNDEFINED_KEY
+                return chr(char.UNDEFINED_KEY)
 
 
 # Basic command line functions
 
 
-def moveCursorLeft(n):
+def move_cursor_left(n):
     """Move cursor left n columns."""
-    forceWrite("\033[{}D".format(n))
+    force_write("\033[{}D".format(n))
 
 
-def moveCursorRight(n):
+def move_cursor_right(n):
     """Move cursor right n columns."""
-    forceWrite("\033[{}C".format(n))
+    force_write("\033[{}C".format(n))
 
 
-def moveCursorUp(n):
+def move_cursor_up(n):
     """Move cursor up n rows."""
-    forceWrite("\033[{}A".format(n))
+    force_write("\033[{}A".format(n))
 
 
-def moveCursorDown(n):
+def move_cursor_down(n):
     """Move cursor down n rows."""
-    forceWrite("\033[{}B".format(n))
+    force_write("\033[{}B".format(n))
 
 
-def moveCursorHead():
+def move_cursor_head():
     """Move cursor to the start of line."""
-    forceWrite("\r")
+    force_write("\r")
 
 
-def clearLine():
+def clear_line():
     """Clear content of one line on the console."""
-    forceWrite(" " * COLUMNS)
-    moveCursorHead()
+    force_write(" " * COLUMNS)
+    move_cursor_head()
 
 
-def clearConsoleUp(n):
+def clear_console_up(n):
     """Clear n console rows (bottom up)."""
     for _ in range(n):
-        clearLine()
-        moveCursorUp(1)
+        clear_line()
+        move_cursor_up(1)
 
 
-def clearConsoleDown(n):
+def clear_console_down(n):
     """Clear n console rows (top down)."""
     for _ in range(n):
-        clearLine()
-        moveCursorDown(1)
-    moveCursorUp(n)
+        clear_line()
+        move_cursor_down(1)
+    move_cursor_up(n)
 
 
-def forceWrite(s, end=""):
+def force_write(s, end=""):
     """Dump everthing in the buffer to the console."""
     sys.stdout.write(s + end)
     sys.stdout.flush()
@@ -184,7 +182,7 @@ def cprint(
     Returns:
         None
     """
-    forceWrite(on + color + s + colors.RESET, end=end)
+    force_write(on + color + s + colors.RESET, end=end)
 
 
 def is_printable(s: str) -> bool:
