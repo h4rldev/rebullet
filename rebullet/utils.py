@@ -8,52 +8,58 @@ from . import colors
 COLUMNS, _ = shutil.get_terminal_size()  ## Size of console
 
 
+def handle_windows_input():
+    import msvcrt
+
+    # Flush the keyboard buffer
+    while msvcrt.kbhit():
+        msvcrt.getwch()
+    if len(char.WIN_CH_BUFFER) != 0:
+        return char.WIN_CH_BUFFER.pop(0)
+    # Read the keystroke
+    ch = msvcrt.getwch()
+    encoding = "mbcs"
+    # If it is a prefix char, get second part
+    if ch.encode(encoding) in (b"\x00", b"\xe0"):
+        ch = handle_prefix_char(ch, msvcrt, encoding)
+    return ch
+
+def handle_prefix_char(ch, msvcrt, encoding):
+    ch2 = ch + msvcrt.getwch()
+    # Translate actual Win chars to bullet char types
+    try:
+        chx = chr(char.WIN_CHAR_MAP[ch2.encode(encoding)])
+        char.WIN_CH_BUFFER.append(chr(char.MOD_KEY_INT))
+        char.WIN_CH_BUFFER.append(chx)
+        if ord(chx) in (
+            char.INSERT_KEY - char.MOD_KEY_FLAG,
+            char.DELETE_KEY - char.MOD_KEY_FLAG,
+            char.PG_UP_KEY - char.MOD_KEY_FLAG,
+            char.PG_DOWN_KEY - char.MOD_KEY_FLAG,
+        ):
+            char.WIN_CH_BUFFER.append(chr(char.MOD_KEY_DUMMY))
+        return chr(char.ESC_KEY)
+    except KeyError:
+        return ch2[1]
+
+def handle_unix_input():
+    import termios
+    import tty
+
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd) # type: ignore
+    try:
+        tty.setraw(fd) # type: ignore
+        return sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings) # type: ignore
+
 def mygetc():
     """Get raw characters from input."""
     if sys.platform == "win32":
-        import msvcrt
-
-        encoding = "mbcs"
-        # Flush the keyboard buffer
-        while msvcrt.kbhit():
-            msvcrt.getwch()
-        if len(char.WIN_CH_BUFFER) == 0:
-            # Read the keystroke
-            ch = msvcrt.getwch()
-            # If it is a prefix char, get second part
-            if ch.encode(encoding) in (b"\x00", b"\xe0"):
-                ch2 = ch + msvcrt.getwch()
-                # Translate actual Win chars to bullet char types
-                try:
-                    chx = chr(char.WIN_CHAR_MAP[ch2.encode(encoding)])
-                    char.WIN_CH_BUFFER.append(chr(char.MOD_KEY_INT))
-                    char.WIN_CH_BUFFER.append(chx)
-                    if ord(chx) in (
-                        char.INSERT_KEY - char.MOD_KEY_FLAG,
-                        char.DELETE_KEY - char.MOD_KEY_FLAG,
-                        char.PG_UP_KEY - char.MOD_KEY_FLAG,
-                        char.PG_DOWN_KEY - char.MOD_KEY_FLAG,
-                    ):
-                        char.WIN_CH_BUFFER.append(chr(char.MOD_KEY_DUMMY))
-                    ch = chr(char.ESC_KEY)
-                except KeyError:
-                    ch = ch2[1]
-            else:
-                pass
-        else:
-            ch = char.WIN_CH_BUFFER.pop(0)
+        return handle_windows_input()
     elif sys.platform in ("linux", "linux2", "darwin"):
-        import termios
-        import tty
-
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setraw(fd)
-            ch = sys.stdin.read(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
+        return handle_unix_input()
 
 
 def getchar():
@@ -77,39 +83,35 @@ def getchar():
 
         case char.ESC_KEY:
             combo = mygetc()
-            if ord(combo) == char.MOD_KEY_INT:
-                key = mygetc()
-                if (
-                    ord(key) >= char.MOD_KEY_BEGIN - char.MOD_KEY_FLAG
-                    and ord(key) <= char.MOD_KEY_END - char.MOD_KEY_FLAG
-                ):
-                    if ord(key) in (
-                        char.HOME_KEY - char.MOD_KEY_FLAG,
-                        char.END_KEY - char.MOD_KEY_FLAG,
-                    ):
-                        return chr(ord(key) + char.MOD_KEY_FLAG)
-                    else:
-                        trail = mygetc()
-                        if ord(trail) == char.MOD_KEY_DUMMY:
-                            return chr(ord(key) + char.MOD_KEY_FLAG)
-                        else:
-                            return chr(char.UNDEFINED_KEY)
-                elif (
-                    char.ARROW_KEY_BEGIN - char.ARROW_KEY_FLAG
-                    <= ord(key)
-                    <= char.ARROW_KEY_END - char.ARROW_KEY_FLAG
-                ):
-                    return chr(ord(key) + char.ARROW_KEY_FLAG)
-                else:
-                    return chr(char.UNDEFINED_KEY)
-            else:
+            if ord(combo) != char.MOD_KEY_INT:
                 return getchar()
 
-        case _:
-            if is_printable(c):
-                return c
+            key = mygetc()
+            if (
+                ord(key) >= char.MOD_KEY_BEGIN - char.MOD_KEY_FLAG
+                and ord(key) <= char.MOD_KEY_END - char.MOD_KEY_FLAG
+            ):
+                if ord(key) in (
+                    char.HOME_KEY - char.MOD_KEY_FLAG,
+                    char.END_KEY - char.MOD_KEY_FLAG,
+                ):
+                    return chr(ord(key) + char.MOD_KEY_FLAG)
+                trail = mygetc()
+                return (
+                    chr(ord(key) + char.MOD_KEY_FLAG)
+                    if ord(trail) == char.MOD_KEY_DUMMY
+                    else chr(char.UNDEFINED_KEY)
+                )
+            elif (
+                char.ARROW_KEY_BEGIN - char.ARROW_KEY_FLAG
+                <= ord(key)
+                <= char.ARROW_KEY_END - char.ARROW_KEY_FLAG
+            ):
+                return chr(ord(key) + char.ARROW_KEY_FLAG)
             else:
                 return chr(char.UNDEFINED_KEY)
+        case _:
+            return c if is_printable(c) else chr(char.UNDEFINED_KEY)
 
 
 # Basic command line functions
@@ -117,22 +119,22 @@ def getchar():
 
 def move_cursor_left(n):
     """Move cursor left n columns."""
-    force_write("\033[{}D".format(n))
+    force_write(f"\033[{n}D")
 
 
 def move_cursor_right(n):
     """Move cursor right n columns."""
-    force_write("\033[{}C".format(n))
+    force_write(f"\033[{n}C")
 
 
 def move_cursor_up(n):
     """Move cursor up n rows."""
-    force_write("\033[{}A".format(n))
+    force_write(f"\033[{n}A")
 
 
 def move_cursor_down(n):
     """Move cursor down n rows."""
-    force_write("\033[{}B".format(n))
+    force_write(f"\033[{n}B")
 
 
 def move_cursor_head():

@@ -26,11 +26,14 @@ def init(cls):
 
 
 class _KeyHandlerRegisterer(type):
-    def __new__(metacls, name, bases, classdict):
-        result = super().__new__(metacls, name, bases, classdict)
+    _key_handler = {}
+    def __new__(cls, name, bases, classdict):
+        result = super().__new__(cls, name, bases, classdict)
         if not hasattr(result, "_key_handler"):
             setattr(result, "_key_handler", {})
-        else: #Create a copy of the _key_handler attribute to avoid inherited classes from changing parent.
+        else:
+            # Create a copy of the _key_handler attribute to avoid
+            # inherited classes from changing parent.
             setattr(result, "_key_handler", getattr(result,"_key_handler").copy())
         setattr(result, "handle_input", _KeyHandlerRegisterer.handle_input)
 
@@ -41,12 +44,10 @@ class _KeyHandlerRegisterer(type):
 
         return result
 
+    #TODO - This method is static and also using self. Figure out which should be kept!
     @staticmethod
     def handle_input(self):
         c = utils.getchar()
         i = c if c == UNDEFINED_KEY else ord(c)
         handler = self._key_handler.get(i)
-        if handler is not None:
-            return handler(self)
-        else:
-            return None
+        return handler(self) if handler is not None else None
