@@ -1,4 +1,5 @@
 """Utils imports"""
+
 import shutil
 import sys
 
@@ -24,6 +25,7 @@ def handle_windows_input():
         ch = handle_prefix_char(ch, msvcrt, encoding)
     return ch
 
+
 def handle_prefix_char(ch, msvcrt, encoding):
     ch2 = ch + msvcrt.getwch()
     # Translate actual Win chars to bullet char types
@@ -42,17 +44,19 @@ def handle_prefix_char(ch, msvcrt, encoding):
     except KeyError:
         return ch2[1]
 
+
 def handle_unix_input():
     import termios
     import tty
 
     fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd) # type: ignore
+    old_settings = termios.tcgetattr(fd)  # type: ignore
     try:
-        tty.setraw(fd) # type: ignore
+        tty.setraw(fd)  # type: ignore
         return sys.stdin.read(1)
     finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings) # type: ignore
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)  # type: ignore
+
 
 def mygetc():
     """Get raw characters from input."""

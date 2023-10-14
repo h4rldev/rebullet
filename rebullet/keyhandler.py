@@ -12,7 +12,7 @@ def register(key):
 
     def wrap(func):
         if not hasattr(func, "_handle_key"):
-            setattr(func, "_handle_key", [key])
+            func._handle_key = [key]
         else:
             func._handle_key.append(key)
         return func
@@ -27,15 +27,16 @@ def init(cls):
 
 class _KeyHandlerRegisterer(type):
     _key_handler = {}
+
     def __new__(cls, name, bases, classdict):
         result = super().__new__(cls, name, bases, classdict)
         if not hasattr(result, "_key_handler"):
-            setattr(result, "_key_handler", {})
+            result._key_handler = {}
         else:
             # Create a copy of the _key_handler attribute to avoid
             # inherited classes from changing parent.
-            setattr(result, "_key_handler", getattr(result,"_key_handler").copy())
-        setattr(result, "handle_input", _KeyHandlerRegisterer.handle_input)
+            result._key_handler = result._key_handler.copy()
+        result.handle_input = _KeyHandlerRegisterer.handle_input
 
         for value in classdict.values():
             handled_keys = getattr(value, "_handle_key", [])
@@ -44,7 +45,7 @@ class _KeyHandlerRegisterer(type):
 
         return result
 
-    #TODO - This method is static and also using self. Figure out which should be kept!
+    # TODO - This method is static and also using self. Figure out which should be kept!
     @staticmethod
     def handle_input(self):
         c = utils.getchar()

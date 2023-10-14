@@ -123,3 +123,6 @@ test.py
 
 # Trunk
 .trunk/*
+
+# VSC
+.vscode/*
