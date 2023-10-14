@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD026 -->
+
 # `rebullet` : Beautiful Python Prompts Made Simple
 
 <p align=center>
