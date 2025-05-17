@@ -171,12 +171,12 @@ class Bullet:
         self.shift = shift
 
         self.bullet = bullet
-        self.bullet_color = bullet_color
+        self.bullet_color         = utils.resolve_color(bullet_color, colors.foreground)
 
-        self.word_color = word_color
-        self.word_on_switch = word_on_switch
-        self.background_color = background_color
-        self.background_on_switch = background_on_switch
+        self.word_color           = utils.resolve_color(word_color, colors.foreground)
+        self.word_on_switch       = utils.resolve_color(word_on_switch, colors.foreground)
+        self.background_color     = utils.resolve_color(background_color, colors.background)
+        self.background_on_switch = utils.resolve_color(background_on_switch, colors.background)
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
