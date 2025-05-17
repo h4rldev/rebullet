@@ -197,3 +197,8 @@ def is_printable(s: str) -> bool:
     """
     # Ref: https://stackoverflow.com/a/50731077
     return not any(repr(ch).startswith(("'\\x", "'\\u")) for ch in s)
+
+def resolve_color(color, mapping):
+    if isinstance(color, str):
+        return mapping.get(color, color)  # if string, get ANSI; else assume already ANSI
+    return color
