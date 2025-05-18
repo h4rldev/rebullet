@@ -18,11 +18,13 @@
 <img src="https://img.shields.io/codefactor/grade/github/h4rldev/rebullet?style=flat-square"></a>
 </p>
 
-***
+---
+
 > 🎨 Customize prompts in your Python CLI tool.
 > Extensive support for formatting, colors, background colors, styling, and etc.
 > Also supports emojis!
-***
+
+---
 
 ## This REPO requires maintainers since I won't be working on it anytime soon
 
@@ -112,11 +114,11 @@ pip install rebullet
 📖 See <a href="https://github.com/h4rldev/rebullet/raw/master/DOCUMENTATION.md"> Documentation</a>.
 
 > Currently supported prompts:
-`Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`,
-`SlidePrompt`, `Scrollbar`, `Date`, `CheckDependencies`.
+> `Bullet`, `Check`, `Input`, `Numbers`, `Password`, `YesNo`, `VerticalPrompt`,
+> `SlidePrompt`, `Scrollbar`, `Date`, `CheckDependencies`.
 
 ## Contributing
 
 🎉 Directly send PRs! Make sure development is done and tested in `Python 3.10`
 <br>
-❗  Make sure to make them mergable to save me and you time.
+❗ Make sure to make them mergable to save me and you time.

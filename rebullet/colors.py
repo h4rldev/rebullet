@@ -32,4 +32,4 @@ RESET = "\u001b[0m"
 
 def bright(color):
     """Colors brightness define."""
-    return color[:-1] + ";1m"
+    return f"{color[:-1]};1m"

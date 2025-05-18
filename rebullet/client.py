@@ -11,9 +11,14 @@ from . import colors, cursor, keyhandler, utils
 from .exceptions import MissingDependenciesError
 from .wrap_text import wrap_text
 
+PROMPT_EMPTY_ERROR = "Prompt can not be empty!"
+CHOICES_EMPTY_ERROR = "Choices can not be empty!"
+INDENT_ERROR = "Indent must be > 0!"
+MARGIN_ERROR = "Margin must be > 0!"
+
 
 # Reusable private utility class
-class myInput:
+class MyInput:
     def __init__(
         self,
         word_color: str = colors.foreground["default"],
@@ -33,7 +38,7 @@ class myInput:
         self.hidden = hidden
         self.word_color = word_color
 
-    def moveCursor(self, pos):
+    def move_cursor(self, pos):
         """Move cursort to pos in buffer."""
         if pos < 0 or pos > len(self.buffer):
             return False
@@ -46,11 +51,11 @@ class myInput:
                 self.pos += 1
         else:
             while self.pos != pos:
-                utils.forceWrite("\b")
+                utils.force_write("\b")
                 self.pos -= 1
         return True
 
-    def insertChar(self, c):
+    def insert_char(self, c):
         """Insert character c to buffer at current position."""
         self.buffer.insert(self.pos, c)
         if self.password:
@@ -63,26 +68,26 @@ class myInput:
             utils.cprint(
                 "".join(self.buffer[self.pos :]), color=self.word_color, end=""
             )
-        utils.forceWrite("\b" * (len(self.buffer) - self.pos - 1))
+        utils.force_write("\b" * (len(self.buffer) - self.pos - 1))
         self.pos += 1
 
-    def getInput(self):
+    def get_input(self):
         """Return content in buffer."""
         ret = "".join(self.buffer)
         self.buffer = []
         self.pos = 0
         return ret
 
-    def deleteChar(self):
+    def delete_char(self):
         """Remove character at current cursor position."""
         if self.pos == len(self.buffer):
             return
         self.buffer.pop(self.pos)
         if self.hidden:
-            utils.forceWrite(self.hidden * (len(self.buffer) - self.pos) + " ")
+            utils.force_write(self.hidden * (len(self.buffer) - self.pos) + " ")
         else:
-            utils.forceWrite("".join(self.buffer[self.pos :]) + " ")
-        utils.forceWrite("\b" * (len(self.buffer) - self.pos + 1))
+            utils.force_write("".join(self.buffer[self.pos :]) + " ")
+        utils.force_write("\b" * (len(self.buffer) - self.pos + 1))
 
     def input(self):
         while True:
@@ -91,8 +96,8 @@ class myInput:
 
             match i:
                 case char.NEWLINE_KEY:
-                    utils.forceWrite("\n")
-                    return self.getInput()
+                    utils.force_write("\n")
+                    return self.get_input()
                 case char.LINE_BEGIN_KEY:
                     return
                 case char.HOME_KEY:
@@ -114,23 +119,20 @@ class myInput:
                 case char.UNDEFINED_KEY:
                     return
                 case char.BACK_SPACE_KEY:
-                    if self.moveCursor(self.pos - 1):
-                        self.deleteChar()
+                    if self.move_cursor(self.pos - 1):
+                        self.delete_char()
                 case char.BACK_SPACE_CHAR:
-                    if self.moveCursor(self.pos - 1):
-                        self.deleteChar()
+                    if self.move_cursor(self.pos - 1):
+                        self.delete_char()
                 case char.DELETE_KEY:
-                    self.deleteChar()
+                    self.delete_char()
                 case char.ARROW_RIGHT_KEY:
-                    self.moveCursor(self.pos + 1)
+                    self.move_cursor(self.pos + 1)
                 case char.ARROW_LEFT_KEY:
-                    self.moveCursor(self.pos - 1)
+                    self.move_cursor(self.pos - 1)
                 case _:
-                    if self.password:
-                        if c != " ":
-                            self.insertChar(c)
-                    else:
-                        self.insertChar(c)
+                    if self.password and c != " " or not self.password:
+                        self.insert_char(c)
 
 
 @keyhandler.init
@@ -154,11 +156,11 @@ class Bullet:
         return_index: bool = False,
     ):
         if not choices:
-            raise ValueError("Choices can not be empty!")
+            raise ValueError(CHOICES_EMPTY_ERROR)
         if indent < 0:
-            raise ValueError("Indent must be > 0!")
+            raise ValueError(INDENT_ERROR)
         if margin < 0:
-            raise ValueError("Margin must be > 0!")
+            raise ValueError(MARGIN_ERROR)
 
         self.prompt = prompt
         self.prompt_color = prompt_color
@@ -182,20 +184,20 @@ class Bullet:
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
         self.return_index = return_index
 
-    def renderBullets(self):
+    def render_bullets(self):
         for i in range(len(self.choices)):
-            self.printBullet(i)
-            utils.forceWrite("\n")
+            self.print_bullet(i)
+            utils.force_write("\n")
 
-    def printBullet(self, idx):
-        utils.forceWrite(" " * (self.indent + self.align))
+    def print_bullet(self, idx):
+        utils.force_write(" " * (self.indent + self.align))
         back_color = (
             self.background_on_switch if idx == self.pos else self.background_color
         )
         word_color = self.word_on_switch if idx == self.pos else self.word_color
         if idx == self.pos:
             utils.cprint(
-                "{}".format(self.bullet) + " " * self.margin,
+                f"{self.bullet}" + " " * self.margin,
                 self.bullet_color,
                 back_color,
                 end="",
@@ -211,57 +213,55 @@ class Bullet:
         utils.cprint(
             " " * (self.max_width - len(self.choices[idx])), on=back_color, end=""
         )
-        utils.moveCursorHead()
+        utils.move_cursor_head()
 
     @keyhandler.register(char.ARROW_UP_KEY)
-    def moveUp(self):
-        if self.pos - 1 < 0:
+    def move_up(self):
+        if self.pos < 1:
             return
-        else:
-            utils.clearLine()
-            old_pos = self.pos
-            self.pos -= 1
-            self.printBullet(old_pos)
-            utils.moveCursorUp(1)
-            self.printBullet(self.pos)
+        utils.clear_line()
+        old_pos = self.pos
+        self.pos -= 1
+        self.print_bullet(old_pos)
+        utils.move_cursor_up(1)
+        self.print_bullet(self.pos)
 
     @keyhandler.register(char.ARROW_DOWN_KEY)
-    def moveDown(self):
+    def move_down(self):
         if self.pos + 1 >= len(self.choices):
             return
-        else:
-            utils.clearLine()
-            old_pos = self.pos
-            self.pos += 1
-            self.printBullet(old_pos)
-            utils.moveCursorDown(1)
-            self.printBullet(self.pos)
+        utils.clear_line()
+        old_pos = self.pos
+        self.pos += 1
+        self.print_bullet(old_pos)
+        utils.move_cursor_down(1)
+        self.print_bullet(self.pos)
 
     @keyhandler.register(char.HOME_KEY)
-    def moveTop(self):
-        utils.clearLine()
+    def move_top(self):
+        utils.clear_line()
         old_pos = self.pos
         self.pos = 0
-        self.printBullet(old_pos)
+        self.print_bullet(old_pos)
         while old_pos > 0:
-            utils.moveCursorUp(1)
+            utils.move_cursor_up(1)
             old_pos -= 1
-        self.printBullet(self.pos)
+        self.print_bullet(self.pos)
 
     @keyhandler.register(char.END_KEY)
-    def moveBottom(self):
-        utils.clearLine()
+    def move_bottom(self):
+        utils.clear_line()
         old_pos = self.pos
         self.pos = len(self.choices) - 1
-        self.printBullet(old_pos)
+        self.print_bullet(old_pos)
         while old_pos < len(self.choices) - 1:
-            utils.moveCursorDown(1)
+            utils.move_cursor_down(1)
             old_pos += 1
-        self.printBullet(self.pos)
+        self.print_bullet(self.pos)
 
     @keyhandler.register(char.NEWLINE_KEY)
     def accept(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
+        utils.move_cursor_down(len(self.choices) - self.pos)
         ret = self.choices[self.pos]
         if self.return_index:
             return ret, self.pos
@@ -270,27 +270,27 @@ class Bullet:
 
     @keyhandler.register(char.INTERRUPT_KEY)
     def interrupt(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
+        utils.move_cursor_down(len(self.choices) - self.pos)
         raise KeyboardInterrupt
 
     def launch(self, default=None):
         if self.prompt:
-            utils.forceWrite(
+            utils.force_write(
                 " " * self.indent
                 + self.prompt_color
                 + self.prompt
                 + colors.RESET
                 + "\n"
             )
-            utils.forceWrite("\n" * self.shift)
+            utils.force_write("\n" * self.shift)
         if default is not None:
             if type(default).__name__ != "int":
                 raise TypeError("'default' should be an integer value!")
             if not 0 <= int(default) < len(self.choices):
                 raise ValueError("'default' should be in range [0, len(choices))!")
             self.pos = default
-        self.renderBullets()
-        utils.moveCursorUp(len(self.choices) - self.pos)
+        self.render_bullets()
+        utils.move_cursor_up(len(self.choices) - self.pos)
         with cursor.hide():
             while True:
                 ret = self.handle_input()
@@ -320,11 +320,11 @@ class Check:
         return_index: bool = False,
     ):
         if not choices:
-            raise ValueError("Choices can not be empty!")
+            raise ValueError(CHOICES_EMPTY_ERROR)
         if indent < 0:
-            raise ValueError("Indent must be > 0!")
+            raise ValueError(INDENT_ERROR)
         if margin < 0:
-            raise ValueError("Margin must be > 0!")
+            raise ValueError(MARGIN_ERROR)
 
         self.prompt = prompt
         self.prompt_color = prompt_color
@@ -337,7 +337,7 @@ class Check:
         self.margin = margin
         self.shift = shift
 
-        self.check = check
+        self.check_value = check
         self.check_color = check_color
         self.check_on_switch = check_on_switch
 
@@ -350,13 +350,13 @@ class Check:
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
         self.return_index = return_index
 
-    def renderRows(self):
+    def render_rows(self):
         for i in range(len(self.choices)):
-            self.printRow(i)
-            utils.forceWrite("\n")
+            self.print_row(i)
+            utils.force_write("\n")
 
-    def printRow(self, idx):
-        utils.forceWrite(" " * (self.indent + self.align))
+    def print_row(self, idx):
+        utils.force_write(" " * (self.indent + self.align))
         back_color = (
             self.background_on_switch if idx == self.pos else self.background_color
         )
@@ -364,113 +364,112 @@ class Check:
         check_color = self.check_on_switch if idx == self.pos else self.check_color
         if self.checked[idx]:
             utils.cprint(
-                "{}".format(self.check) + " " * self.margin,
+                f"{self.check_value}" + " " * self.margin,
                 check_color,
                 back_color,
                 end="",
             )
         else:
             utils.cprint(
-                " " * (len(self.check) + self.margin), check_color, back_color, end=""
+                " " * (len(self.check_value) + self.margin),
+                check_color,
+                back_color,
+                end="",
             )
         utils.cprint(self.choices[idx], word_color, back_color, end="")
         utils.cprint(
             " " * (self.max_width - len(self.choices[idx])), on=back_color, end=""
         )
-        utils.moveCursorHead()
+        utils.move_cursor_head()
 
     @keyhandler.register(char.SPACE_CHAR)
-    def toggleRow(self):
+    def toggle_row(self):
         self.checked[self.pos] = not self.checked[self.pos]
-        self.printRow(self.pos)
+        self.print_row(self.pos)
 
     @keyhandler.register(char.ARROW_UP_KEY)
-    def moveUp(self):
-        if self.pos - 1 < 0:
+    def move_up(self):
+        if self.pos < 1:
             return
-        else:
-            utils.clearLine()
-            old_pos = self.pos
-            self.pos -= 1
-            self.printRow(old_pos)
-            utils.moveCursorUp(1)
-            self.printRow(self.pos)
+        utils.clear_line()
+        old_pos = self.pos
+        self.pos -= 1
+        self.print_row(old_pos)
+        utils.move_cursor_up(1)
+        self.print_row(self.pos)
 
     @keyhandler.register(char.ARROW_DOWN_KEY)
-    def moveDown(self):
+    def move_down(self):
         if self.pos + 1 >= len(self.choices):
             return
-        else:
-            utils.clearLine()
-            old_pos = self.pos
-            self.pos += 1
-            self.printRow(old_pos)
-            utils.moveCursorDown(1)
-            self.printRow(self.pos)
+        utils.clear_line()
+        old_pos = self.pos
+        self.pos += 1
+        self.print_row(old_pos)
+        utils.move_cursor_down(1)
+        self.print_row(self.pos)
 
     @keyhandler.register(char.HOME_KEY)
-    def moveTop(self):
-        utils.clearLine()
+    def move_top(self):
+        utils.clear_line()
         old_pos = self.pos
         self.pos = 0
-        self.printRow(old_pos)
+        self.print_row(old_pos)
         while old_pos > 0:
-            utils.moveCursorUp(1)
+            utils.move_cursor_up(1)
             old_pos -= 1
-        self.printRow(self.pos)
+        self.print_row(self.pos)
 
     @keyhandler.register(char.END_KEY)
-    def moveBottom(self):
-        utils.clearLine()
+    def move_bottom(self):
+        utils.clear_line()
         old_pos = self.pos
         self.pos = len(self.choices) - 1
-        self.printRow(old_pos)
+        self.print_row(old_pos)
         while old_pos < len(self.choices) - 1:
-            utils.moveCursorDown(1)
+            utils.move_cursor_down(1)
             old_pos += 1
-        self.printRow(self.pos)
+        self.print_row(self.pos)
 
     @keyhandler.register(char.NEWLINE_KEY)
     def accept(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
+        utils.move_cursor_down(len(self.choices) - self.pos)
         ret = [self.choices[i] for i in range(len(self.choices)) if self.checked[i]]
         ret_idx = [i for i in range(len(self.choices)) if self.checked[i]]
         self.pos = 0
         self.checked = [False] * len(self.choices)
-        if self.return_index:
-            return ret, ret_idx
-        return ret
+        return (ret, ret_idx) if self.return_index else ret
 
     @keyhandler.register(char.INTERRUPT_KEY)
     def interrupt(self):
-        utils.moveCursorDown(len(self.choices) - self.pos)
+        utils.move_cursor_down(len(self.choices) - self.pos)
         raise KeyboardInterrupt
 
     def launch(self, default=None):
         if self.prompt:
-            utils.forceWrite(
+            utils.force_write(
                 " " * self.indent
                 + self.prompt_color
                 + self.prompt
                 + colors.RESET
                 + "\n"
             )
-            utils.forceWrite("\n" * self.shift)
+            utils.force_write("\n" * self.shift)
         if default is None:
             default = []
         if default:
-            if not type(default).__name__ == "list":
+            if type(default).__name__ != "list":
                 raise TypeError("`default` should be a list of integers!")
-            if not all([type(i).__name__ == "int" for i in default]):
+            if any(type(i).__name__ != "int" for i in default):
                 raise TypeError("Indices in `default` should be integer type!")
-            if not all([0 <= i < len(self.choices) for i in default]):
+            if not all(0 <= i < len(self.choices) for i in default):
                 raise ValueError(
                     "All indices in `default` should be in range [0, len(choices))!"
                 )
             for i in default:
                 self.checked[i] = True
-        self.renderRows()
-        utils.moveCursorUp(len(self.choices))
+        self.render_rows()
+        utils.move_cursor_up(len(self.choices))
         with cursor.hide():
             while True:
                 ret = self.handle_input()
@@ -495,7 +494,7 @@ class CheckDependencies(Check):
         )
         """
         self.validateDependencies(dep_tree)
-        self.dependencies = {k: v for k, v in dep_tree}
+        self.dependencies = dict(dep_tree)
         self.dependants = defaultdict(set)
         for k, deps in dep_tree:
             for d in deps:
@@ -542,16 +541,16 @@ class CheckDependencies(Check):
                 self.uncheckDependants(dep, unchecks)
 
     def refresh(self):
-        if not self.pos == 0:
-            utils.moveCursorUp(self.pos)
-        utils.clearLine()
-        self.printRow(0)
+        if self.pos != 0:
+            utils.move_cursor_up(self.pos)
+        utils.clear_line()
+        self.print_row(0)
         for pos in range(1, len(self.choices)):
-            utils.moveCursorDown(0)
-            utils.clearLine()
-            self.printRow(pos)
-        if not self.pos == len(self.choices) - 1:
-            utils.moveCursorUp(len(self.choices) - self.pos - 1)
+            utils.move_cursor_down(0)
+            utils.clear_line()
+            self.print_row(pos)
+        if self.pos != len(self.choices) - 1:
+            utils.move_cursor_up(len(self.choices) - self.pos - 1)
 
 
 class YesNo:
@@ -566,7 +565,7 @@ class YesNo:
     ):
         self.indent = indent
         if not prompt:
-            raise ValueError("Prompt can not be empty!")
+            raise ValueError(PROMPT_EMPTY_ERROR)
         if default.lower() not in ["y", "n"]:
             raise ValueError("`default` can only be 'y' or 'n'!")
         self.default = f"[{default.lower()}]: "
@@ -581,21 +580,21 @@ class YesNo:
         ans = ans.lower()
         if "yes".startswith(ans) or "no".startswith(ans):
             return True
-        utils.moveCursorUp(self.prompt.count("\n") + 1)
-        utils.forceWrite(
+        utils.move_cursor_up(self.prompt.count("\n") + 1)
+        utils.force_write(
             " " * self.indent
             + self.prompt_color
             + self.prompt
             + self.default
             + colors.RESET
         )
-        utils.forceWrite(" " * len(ans))
-        utils.forceWrite("\b" * len(ans))
+        utils.force_write(" " * len(ans))
+        utils.force_write("\b" * len(ans))
         return False
 
     def launch(self):
-        my_input = myInput(word_color=self.word_color)
-        utils.forceWrite(
+        my_input = MyInput(word_color=self.word_color)
+        utils.force_write(
             " " * self.indent
             + self.prompt_color
             + self.prompt
@@ -625,7 +624,7 @@ class Input:
     ):
         self.indent = indent
         if not prompt:
-            raise ValueError("Prompt can not be empty!")
+            raise ValueError(PROMPT_EMPTY_ERROR)
         self.default = f"[{default}]: " if default else ""
         self.prompt = prompt
         self.prompt_color = prompt_color
@@ -635,41 +634,39 @@ class Input:
 
     def valid(self, ans):
         if not bool(re.match(self.pattern, ans)):
-            utils.moveCursorUp(1)
-            utils.forceWrite(" " * self.indent + self.prompt + self.default)
-            utils.forceWrite(" " * len(ans))
-            utils.forceWrite("\b" * len(ans))
+            utils.move_cursor_up(1)
+            utils.force_write(" " * self.indent + self.prompt + self.default)
+            utils.force_write(" " * len(ans))
+            utils.force_write("\b" * len(ans))
             return False
         return True
 
     def launch(self):
-        utils.forceWrite(
+        utils.force_write(
             " " * self.indent
             + self.prompt_color
             + self.prompt
             + self.default
             + colors.RESET
         )
-        sess = myInput(word_color=self.word_color)
+        sess = MyInput(word_color=self.word_color)
         if not self.pattern:
             while True:
                 result = sess.input()
-                if result == "":
-                    if self.default != "":
-                        return self.default[1:-1]
-                    else:
-                        utils.moveCursorUp(1)
-                        utils.forceWrite(
-                            " " * self.indent
-                            + self.prompt_color
-                            + self.prompt
-                            + self.default
-                            + colors.RESET
-                        )
-                        utils.forceWrite(" " * len(result))
-                        utils.forceWrite("\b" * len(result))
-                else:
+                if result != "":
                     break
+                if self.default != "":
+                    return self.default[1:-1]
+                utils.move_cursor_up(1)
+                utils.force_write(
+                    " " * self.indent
+                    + self.prompt_color
+                    + self.prompt
+                    + self.default
+                    + colors.RESET
+                )
+                utils.force_write(" " * len(result))
+                utils.force_write("\b" * len(result))
         else:
             while True:
                 result = sess.input()
@@ -690,16 +687,16 @@ class Password:
         self.indent = indent
         self.prompt_color = prompt_color
         if not prompt:
-            raise ValueError("Prompt can not be empty!")
+            raise ValueError(PROMPT_EMPTY_ERROR)
         self.prompt = prompt
         self.hidden = hidden
         self.word_color = word_color
 
     def launch(self):
-        utils.forceWrite(
+        utils.force_write(
             " " * self.indent + self.prompt_color + self.prompt + colors.RESET
         )
-        return myInput(
+        return MyInput(
             password=True, hidden=self.hidden, word_color=self.word_color
         ).input()
 
@@ -715,7 +712,7 @@ class Numbers:
     ):
         self.indent = indent
         if not prompt:
-            raise ValueError("Prompt can not be empty!")
+            raise ValueError(PROMPT_EMPTY_ERROR)
         self.prompt = prompt
         self.prompt_color = prompt_color
         self.word_color = word_color
@@ -726,12 +723,12 @@ class Numbers:
             self.type(ans)
             return True
         except Exception:
-            utils.moveCursorUp(1)
-            utils.forceWrite(
+            utils.move_cursor_up(1)
+            utils.force_write(
                 " " * self.indent + self.prompt_color + self.prompt + colors.RESET
             )
-            utils.forceWrite(" " * len(ans))
-            utils.forceWrite("\b" * len(ans))
+            utils.force_write(" " * len(ans))
+            utils.force_write("\b" * len(ans))
             return False
 
     def launch(self, default=None):
@@ -739,9 +736,9 @@ class Numbers:
             try:
                 self.type(default)
             except Exception:
-                raise ValueError("`default` should be a " + str(self.type)) from None
-        my_input = myInput(word_color=self.word_color)
-        utils.forceWrite(
+                raise ValueError(f"`default` should be a {str(self.type)}") from None
+        my_input = MyInput(word_color=self.word_color)
+        utils.force_write(
             " " * self.indent + self.prompt_color + self.prompt + colors.RESET
         )
         while True:
@@ -782,7 +779,7 @@ class VerticalPrompt:
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
             if not self.separator:
-                utils.forceWrite("\n" * self.spacing)
+                utils.force_write("\n" * self.spacing)
             else:
                 utils.cprint(
                     self.separator * self.separator_len, color=self.separator_color
@@ -815,11 +812,11 @@ class ScrollBar:
         return_index: bool = False,
     ):
         if not choices:
-            raise ValueError("Choices can not be empty!")
+            raise ValueError(CHOICES_EMPTY_ERROR)
         if indent < 0:
-            raise ValueError("Indent must be > 0!")
+            raise ValueError(INDENT_ERROR)
         if margin < 0:
-            raise ValueError("Margin must be > 0!")
+            raise ValueError(MARGIN_ERROR)
 
         self.prompt = prompt
         self.prompt_color = prompt_color
@@ -845,7 +842,7 @@ class ScrollBar:
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
         self.height = min(
             len(self.choices),  # Size of the scrollbar window.
-            height if height else len(self.choices),
+            height or len(self.choices),
         )
 
         self.top = 0  # Position of the top-most item rendered.
@@ -855,26 +852,26 @@ class ScrollBar:
 
         self.return_index = return_index
 
-    def renderRows(self):
-        self.printRow(self.top, indicator=self.up_indicator if self.top != 0 else " ")
-        utils.forceWrite("\n")
+    def render_rows(self):
+        self.print_row(self.top, indicator=self.up_indicator if self.top != 0 else " ")
+        utils.force_write("\n")
 
         i = self.top
         for i in range(self.top + 1, self.top + self.height - 1):
-            self.printRow(i)
-            utils.forceWrite("\n")
+            self.print_row(i)
+            utils.force_write("\n")
 
         if i < len(self.choices) - 1:
-            self.printRow(
+            self.print_row(
                 i + 1,
                 indicator=self.down_indicator
                 if self.top + self.height != len(self.choices)
                 else "",
             )
-            utils.forceWrite("\n")
+            utils.force_write("\n")
 
-    def printRow(self, idx, indicator=""):
-        utils.forceWrite(" " * (self.indent + self.align))
+    def print_row(self, idx, indicator=""):
+        utils.force_write(" " * (self.indent + self.align))
         back_color = (
             self.background_on_switch if idx == self.pos else self.background_color
         )
@@ -882,7 +879,7 @@ class ScrollBar:
 
         if idx == self.pos:
             utils.cprint(
-                "{}".format(self.pointer) + " " * self.margin,
+                f"{self.pointer}" + " " * self.margin,
                 self.pointer_color,
                 back_color,
                 end="",
@@ -899,115 +896,107 @@ class ScrollBar:
             " " * (self.max_width - len(self.choices[idx])), on=back_color, end=""
         )
         utils.cprint(indicator, color=self.indicator_color, end="")
-        utils.moveCursorHead()
+        utils.move_cursor_head()
 
     @keyhandler.register(char.ARROW_UP_KEY)
-    def moveUp(self):
+    def move_up(self):
         if self.pos == self.top:
             if self.top == 0:
                 return  # Already reached top-most position
-            else:
-                utils.clearConsoleDown(self.height)
-                self.pos, self.top = self.pos - 1, self.top - 1
-                self.renderRows()
-                utils.moveCursorUp(self.height)
+            utils.clear_console_down(self.height)
+            self.pos, self.top = self.pos - 1, self.top - 1
+            self.render_rows()
+            utils.move_cursor_up(self.height)
         else:
-            utils.clearLine()
+            utils.clear_line()
             old_pos = self.pos
             self.pos -= 1
             show_arrow = (
                 old_pos == self.top + self.height - 1
                 and self.top + self.height < len(self.choices)
             )
-            self.printRow(old_pos, indicator=self.down_indicator if show_arrow else "")
-            utils.moveCursorUp(1)
-            self.printRow(self.pos)
+            self.print_row(old_pos, indicator=self.down_indicator if show_arrow else "")
+            utils.move_cursor_up(1)
+            self.print_row(self.pos)
 
     @keyhandler.register(char.ARROW_DOWN_KEY)
-    def moveDown(self):
+    def move_down(self):
         if self.pos == self.top + self.height - 1:
             if self.top + self.height == len(self.choices):
                 return
-            else:
-                utils.clearConsoleUp(self.height)
-                utils.moveCursorDown(1)
-                self.pos, self.top = self.pos + 1, self.top + 1
-                self.renderRows()
-                utils.moveCursorUp(1)
+            utils.clear_console_up(self.height)
+            utils.move_cursor_down(1)
+            self.pos, self.top = self.pos + 1, self.top + 1
+            self.render_rows()
+            utils.move_cursor_up(1)
         else:
-            utils.clearLine()
+            utils.clear_line()
             old_pos = self.pos
             self.pos += 1
             show_arrow = old_pos == self.top and self.top > 0
-            self.printRow(old_pos, indicator=self.up_indicator if show_arrow else "")
-            utils.moveCursorDown(1)
-            self.printRow(self.pos)
+            self.print_row(old_pos, indicator=self.up_indicator if show_arrow else "")
+            utils.move_cursor_down(1)
+            self.print_row(self.pos)
 
     @keyhandler.register(char.HOME_KEY)
-    def moveTop(self):
+    def move_top(self):
         if self.pos == self.top:
             if self.top == 0:
                 return  # Already reached top-most position
-            else:
-                pass  # Not at top-most position
         else:
-            utils.moveCursorUp(self.pos - self.top)
-        utils.clearConsoleDown(self.height)
+            utils.move_cursor_up(self.pos - self.top)
+        utils.clear_console_down(self.height)
         self.pos = self.top = 0
-        self.renderRows()
-        utils.moveCursorUp(self.height)
+        self.render_rows()
+        utils.move_cursor_up(self.height)
 
     @keyhandler.register(char.END_KEY)
-    def moveBottom(self):
+    def move_bottom(self):
         if self.pos == self.top + self.height - 1:
             if self.top + self.height == len(self.choices):
                 return  # Already reached bottom-most position
-            else:
-                pass  # Not already at bottm-most position
         else:
-            utils.moveCursorDown(self.height - (self.pos - self.top + 1))
-        utils.clearConsoleUp(self.height)
-        utils.moveCursorDown(1)
+            utils.move_cursor_down(self.height - (self.pos - self.top + 1))
+        utils.clear_console_up(self.height)
+        utils.move_cursor_down(1)
         self.top = len(self.choices) - self.height
         self.pos = len(self.choices) - 1
-        self.renderRows()
-        utils.moveCursorUp(1)
+        self.render_rows()
+        utils.move_cursor_up(1)
 
     @keyhandler.register(char.PG_UP_KEY)
-    def movePgUp(self):
+    def move_page_up(self):
         if self.pos == self.top:
             if self.top == 0:
                 return  # Already reached top-most position
-            else:
-                pass  # Not at top-most position
         else:
-            utils.moveCursorUp(self.pos - self.top)
-        utils.clearConsoleDown(self.height)
+            utils.move_cursor_up(self.pos - self.top)
+        utils.clear_console_down(self.height)
         self.top = max(0, self.top - self.height)
         self.pos = max(0, self.pos - self.height)
-        self.renderRows()
-        utils.moveCursorUp(self.height - (self.pos - self.top))
+        self.render_rows()
+        utils.move_cursor_up(self.height - (self.pos - self.top))
 
     @keyhandler.register(char.PG_DOWN_KEY)
-    def movePgDown(self):
+    def move_page_down(self):
         if self.pos == self.top + self.height - 1:
             if self.top + self.height == len(self.choices):
                 return  # Already reached bottom-most position
             else:
-                utils.moveCursorDown(self.height - (self.pos - self.top + 1))
+                utils.move_cursor_down(self.height - (self.pos - self.top + 1))
         else:
-            utils.moveCursorDown(self.height - (self.pos - self.top + 1))
-        utils.clearConsoleUp(self.height)
-        utils.moveCursorDown(1)
+            utils.move_cursor_down(self.height - (self.pos - self.top + 1))
+        utils.clear_console_up(self.height)
+        utils.move_cursor_down(1)
         self.top = min(len(self.choices) - self.height, self.top + self.height)
         self.pos = min(len(self.choices) - 1, self.pos + self.height)
-        self.renderRows()
-        utils.moveCursorUp(1 + self.height - (self.pos - self.top + 1))
+        self.render_rows()
+        utils.move_cursor_up(1 + self.height - (self.pos - self.top + 1))
 
     @keyhandler.register(char.NEWLINE_KEY)
     def accept(self):
         d = self.top + self.height - self.pos
-        utils.moveCursorDown(d)
+        utils.move_cursor_down(d)
         ret = self.choices[self.pos]
         if self.return_index:
             return ret, self.pos
@@ -1017,21 +1006,21 @@ class ScrollBar:
     @keyhandler.register(char.INTERRUPT_KEY)
     def interrupt(self):
         d = self.top + self.height - self.pos
-        utils.moveCursorDown(d)
+        utils.move_cursor_down(d)
         raise KeyboardInterrupt
 
     def launch(self):
         if self.prompt:
-            utils.forceWrite(
+            utils.force_write(
                 " " * self.indent
                 + self.prompt_color
                 + self.prompt
                 + colors.RESET
                 + "\n"
             )
-            utils.forceWrite("\n" * self.shift)
-        self.renderRows()
-        utils.moveCursorUp(self.height)
+            utils.force_write("\n" * self.shift)
+        self.render_rows()
+        utils.move_cursor_up(self.height)
         with cursor.hide():
             while True:
                 ret = self.handle_input()
@@ -1056,10 +1045,10 @@ class SlidePrompt:
         for ui in self.components:
             self.result.append((ui.prompt, ui.launch()))
             d = 1
-            if type(ui).__name__ == "Bullet" or type(ui).__name__ == "Check":
+            if type(ui).__name__ in ["Bullet", "Check"]:
                 d = 1 + ui.shift + len(ui.choices)
-            utils.clearConsoleUp(d + 1)
-            utils.moveCursorDown(1)
+            utils.clear_console_up(d + 1)
+            utils.move_cursor_down(1)
         return self.result
 
 
@@ -1101,7 +1090,7 @@ class Date(Input):
                 return date.date()
             except ValueError:
                 error = f"Error! '{result}' could not be parsed as a valid date.\n"
-                help = (
+                help_message = (
                     "You can use any format recognized by dateutil.parser."
                     " For example, all of "
                     "the strings below are valid ways to represent the same date:\n"
@@ -1109,6 +1098,6 @@ class Date(Input):
                 examples = '\n"2018-5-13" -or- "05/13/2018" -or- "May 13 2018"\n'
                 utils.cprint(error, color=colors.bright(colors.foreground["red"]))
                 utils.cprint(
-                    wrap_text(help, max_len=70), color=colors.foreground["red"]
+                    wrap_text(help_message, max_len=70), color=colors.foreground["red"]
                 )
                 utils.cprint(examples, color=colors.foreground["red"])

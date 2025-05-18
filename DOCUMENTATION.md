@@ -6,9 +6,11 @@
 <br><br><br>
 </p>
 
-***
+---
+
 > 👷 To fully customize your prompts, you'll have to take total control of formatting and colors. Here's what you need to know.
-***
+
+---
 
 ## Table of Contents
 
@@ -236,7 +238,7 @@ cli = VerticalPrompt(
 result = cli.launch()
 ```
 
-### Using  `SlidePrompt` Object<a name="topic_17"></a>
+### Using `SlidePrompt` Object<a name="topic_17"></a>
 
 - Link `bullet` UI components into a multi-stage prompt. Previous prompts will be cleared upon entering the next stage.
 - Returns a list of tuples `(prompt, result)`.
