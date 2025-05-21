@@ -161,7 +161,7 @@ class Bullet:
             raise ValueError("Margin must be > 0!")
 
         self.prompt = prompt
-        self.prompt_color = prompt_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
         self.choices = choices
         self.pos = 0
 
@@ -172,7 +172,6 @@ class Bullet:
 
         self.bullet = bullet
         self.bullet_color         = utils.resolve_color(bullet_color, colors.foreground)
-
         self.word_color           = utils.resolve_color(word_color, colors.foreground)
         self.word_on_switch       = utils.resolve_color(word_on_switch, colors.foreground)
         self.background_color     = utils.resolve_color(background_color, colors.background)
@@ -327,7 +326,7 @@ class Check:
             raise ValueError("Margin must be > 0!")
 
         self.prompt = prompt
-        self.prompt_color = prompt_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
         self.choices = choices
         self.checked = [False] * len(self.choices)
         self.pos = 0
@@ -338,13 +337,13 @@ class Check:
         self.shift = shift
 
         self.check = check
-        self.check_color = check_color
-        self.check_on_switch = check_on_switch
+        self.check_color = utils.resolve_color(check_color, colors.foreground)
+        self.check_on_switch = utils.resolve_color(check_on_switch, colors.foreground)
 
-        self.word_color = word_color
-        self.word_on_switch = word_on_switch
-        self.background_color = background_color
-        self.background_on_switch = background_on_switch
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
+        self.word_on_switch = utils.resolve_color(word_on_switch, colors.foreground)
+        self.background_color = utils.resolve_color(background_color, colors.background)
+        self.background_on_switch = utils.resolve_color(background_on_switch, colors.background)
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
@@ -570,10 +569,9 @@ class YesNo:
         if default.lower() not in ["y", "n"]:
             raise ValueError("`default` can only be 'y' or 'n'!")
         self.default = f"[{default.lower()}]: "
-        self.default = f"[{default.lower()}]: "
         self.prompt = prompt_prefix + prompt
-        self.prompt_color = prompt_color
-        self.word_color = word_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
 
     def valid(self, ans):
         if ans is None:
@@ -628,8 +626,8 @@ class Input:
             raise ValueError("Prompt can not be empty!")
         self.default = f"[{default}]: " if default else ""
         self.prompt = prompt
-        self.prompt_color = prompt_color
-        self.word_color = word_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
         self.strip = strip
         self.pattern = pattern
 
@@ -688,12 +686,12 @@ class Password:
         word_color: str = colors.foreground["default"],
     ):
         self.indent = indent
-        self.prompt_color = prompt_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
         self.hidden = hidden
-        self.word_color = word_color
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
 
     def launch(self):
         utils.forceWrite(
@@ -717,8 +715,8 @@ class Numbers:
         if not prompt:
             raise ValueError("Prompt can not be empty!")
         self.prompt = prompt
-        self.prompt_color = prompt_color
-        self.word_color = word_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
         self.type = type
 
     def valid(self, ans):
@@ -767,7 +765,7 @@ class VerticalPrompt:
         self.components = components
         self.spacing = spacing
         self.separator = separator
-        self.separator_color = separator_color
+        self.separator_color = utils.resolve_color(separator_color, colors.foreground)
         self.separator_len = len(
             max(self.components, key=lambda ui: len(ui.prompt)).prompt
         )
@@ -822,7 +820,7 @@ class ScrollBar:
             raise ValueError("Margin must be > 0!")
 
         self.prompt = prompt
-        self.prompt_color = prompt_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
         self.choices = choices
         self.pos = 0  # Position of item at current cursor.
 
@@ -835,12 +833,12 @@ class ScrollBar:
         self.up_indicator = up_indicator
         self.down_indicator = down_indicator
 
-        self.pointer_color = pointer_color
-        self.indicator_color = indicator_color
-        self.word_color = word_color
-        self.word_on_switch = word_on_switch
-        self.background_color = background_color
-        self.background_on_switch = background_on_switch
+        self.pointer_color = utils.resolve_color(pointer_color, colors.foreground)
+        self.indicator_color = utils.resolve_color(indicator_color, colors.foreground)
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
+        self.word_on_switch = utils.resolve_color(word_on_switch, colors.foreground)
+        self.background_color = utils.resolve_color(background_color, colors.background)
+        self.background_on_switch = utils.resolve_color(background_on_switch, colors.background)
 
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
         self.height = min(
@@ -1089,7 +1087,7 @@ class Date(Input):
     ):
         if default:
             default = default.strftime(format_str)
-        super().__init__(prompt, default=default, indent=indent, word_color=word_color)
+        super().__init__(prompt, default=default, indent=indent, word_color=utils.resolve_color(word_color, colors.foreground))
 
     def launch(self):
         while True:
