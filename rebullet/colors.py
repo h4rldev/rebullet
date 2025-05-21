@@ -30,6 +30,22 @@ RESET_REVERSE = "\u001b[27m"
 RESET = "\u001b[0m"
 
 
-def bright(color):
-    """Colors brightness define."""
-    return color[:-1] + ";1m"
+def bright(color, mapping=None):
+    """Return the bright version of a color.
+    Accepts either a color name or an ANSI code.
+    Optionally, provide a mapping (e.g., foreground or background).
+    """
+    # If mapping is provided and color is a name, resolve it
+    if mapping and isinstance(color, str) and color in mapping:
+        color = mapping[color]
+    # If color is a known color name, try foreground and background
+    elif isinstance(color, str) and color in foreground:
+        color = foreground[color]
+    elif isinstance(color, str) and color in background:
+        color = background[color]
+    # Now color should be an ANSI code string
+    if isinstance(color, str) and color.startswith("\u001b["):
+        # Replace 'm' at the end with ';1m' for bright
+        if color.endswith("m"):
+            return color[:-1] + ";1m"
+    return color  # fallback: return as is
