@@ -1,7 +1,9 @@
 """Exceptions class"""
 
+
 class MissingDependenciesError(Exception):
     """MissingDependenciesError Class"""
+
     def __init__(self, missing_dependencies):
         message = " ".join(
             [

@@ -13,6 +13,6 @@ cli = ScrollBar(
     word_on_switch = 'default',
     return_index = True
 )
-print('\n')
+print("\n")
 result = cli.launch()
 print(result)

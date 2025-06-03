@@ -18,18 +18,21 @@ class MinMaxCheck(Check):
             return super().accept()
 
     def valid(self):
-        return self.min_selections <= sum(
-            1 for c in self.checked if c
-        ) <= self.max_selections
+        return (
+            self.min_selections
+            <= sum(1 for c in self.checked if c)
+            <= self.max_selections
+        )
+
 
 client = MinMaxCheck(
-    prompt = "Choose 2 or 3 from the list: ",
-    min_selections = 2,
-    max_selections = 3,
-    return_index = True,
+    prompt="Choose 2 or 3 from the list: ",
+    min_selections=2,
+    max_selections=3,
+    return_index=True,
     **styles.Example,
     **styles.Exam,
 )
-print('\n', end = '')
+print("\n", end="")
 result = client.launch()
 print(result)

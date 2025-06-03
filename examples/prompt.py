@@ -1,6 +1,6 @@
 """Prompt imports"""
 
-from rebullet import (Bullet, Check, Input, Numbers, SlidePrompt, YesNo, colors)
+from rebullet import Bullet, Check, Input, Numbers, SlidePrompt, YesNo, colors
 
 cli = SlidePrompt(
     [
@@ -48,6 +48,6 @@ cli = SlidePrompt(
     ]
 )
 
-print('\n')
+print("\n")
 result = cli.launch()
 cli.summarize()

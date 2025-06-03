@@ -37,7 +37,7 @@
   // MD007/ul-indent - Unordered list indentation
   "MD007": {
     // Spaces for indent
-    "indent": 4,
+    "indent": 2,
     // Whether to indent the first level of the list
     "start_indented": false,
     // Spaces for first level indent (when start_indented is set)
@@ -76,11 +76,11 @@
   // MD013/line-length - Line length
   "MD013": {
     // Number of characters
-    "line_length": 80,
+    "line_length": 360,
     // Number of characters for headings
-    "heading_line_length": 80,
+    "heading_line_length": 360,
     // Number of characters for code blocks
-    "code_block_line_length": 80,
+    "code_block_line_length": 360,
     // Include code blocks
     "code_blocks": true,
     // Include tables
