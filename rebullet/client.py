@@ -18,20 +18,22 @@ MARGIN_ERROR = "Margin must be > 0!"
 
 
 # Reusable private utility class
-class MyInput:
+class myInput:
+    """
+    Custom input handler for interactive CLI input with color and password support.
+
+    Args:
+        word_color (str): Foreground color for input text. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        password (bool): If True, input is masked (for passwords).
+        hidden (str): Character to display for masked input.
+    """
+
     def __init__(
         self,
         word_color: str = colors.foreground["default"],
         password: bool = False,
         hidden: str = "*",
     ):
-        """Construct for myInput."""
-        """
-        Args:
-            word_color: color of input characters.
-            password: Whether input is password.
-            hidden: Character to be outputted for password input.
-        """
         self.buffer = []  # Buffer to store entered characters
         self.pos = 0  # Current cursor position
         self.password = password
@@ -137,6 +139,27 @@ class MyInput:
 
 @keyhandler.init
 class Bullet:
+    """
+    Interactive bullet list selector for CLI with color customization.
+
+    Args:
+        prompt (str): Prompt text.
+        choices (list): List of choices to display.
+        bullet (str): Bullet character.
+        prompt_color (str): Foreground color for prompt. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        bullet_color (str): Foreground color for bullet. Available: same as above.
+        word_color (str): Foreground color for choices. Available: same as above.
+        word_on_switch (str): Foreground color for selected choice. Available: same as above, or use colors.REVERSE for reverse video.
+        background_color (str): Background color for choices. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        background_on_switch (str): Background color for selected choice. Available: same as above, or use colors.REVERSE.
+        pad_right (int): Padding to the right of choices.
+        indent (int): Indentation from left.
+        align (int): Additional alignment spaces.
+        margin (int): Margin between bullet and text.
+        shift (int): Lines to shift down after prompt.
+        return_index (bool): If True, return (choice, index).
+    """
+
     def __init__(
         self,
         prompt: str = "",
@@ -163,7 +186,7 @@ class Bullet:
             raise ValueError(MARGIN_ERROR)
 
         self.prompt = prompt
-        self.prompt_color = prompt_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
         self.choices = choices
         self.pos = 0
 
@@ -173,12 +196,11 @@ class Bullet:
         self.shift = shift
 
         self.bullet = bullet
-        self.bullet_color = bullet_color
-
-        self.word_color = word_color
-        self.word_on_switch = word_on_switch
-        self.background_color = background_color
-        self.background_on_switch = background_on_switch
+        self.bullet_color         = utils.resolve_color(bullet_color, colors.foreground)
+        self.word_color           = utils.resolve_color(word_color, colors.foreground)
+        self.word_on_switch       = utils.resolve_color(word_on_switch, colors.foreground)
+        self.background_color     = utils.resolve_color(background_color, colors.background)
+        self.background_on_switch = utils.resolve_color(background_on_switch, colors.background)
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
@@ -300,6 +322,28 @@ class Bullet:
 
 @keyhandler.init
 class Check:
+    """
+    Interactive checkbox list selector for CLI with color customization.
+
+    Args:
+        prompt (str): Prompt text.
+        choices (list): List of choices to display.
+        check (str): Checkmark character.
+        prompt_color (str): Foreground color for prompt. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        check_color (str): Foreground color for checkmark. Available: same as above.
+        check_on_switch (str): Foreground color for selected checkmark. Available: same as above, or colors.REVERSE.
+        word_color (str): Foreground color for choices. Available: same as above.
+        word_on_switch (str): Foreground color for selected choice. Available: same as above, or colors.REVERSE.
+        background_color (str): Background color for choices. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        background_on_switch (str): Background color for selected choice. Available: same as above, or colors.REVERSE.
+        pad_right (int): Padding to the right of choices.
+        indent (int): Indentation from left.
+        align (int): Additional alignment spaces.
+        margin (int): Margin between check and text.
+        shift (int): Lines to shift down after prompt.
+        return_index (bool): If True, return (choices, indices).
+    """
+
     def __init__(
         self,
         prompt: str = "",
@@ -327,7 +371,7 @@ class Check:
             raise ValueError(MARGIN_ERROR)
 
         self.prompt = prompt
-        self.prompt_color = prompt_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
         self.choices = choices
         self.checked = [False] * len(self.choices)
         self.pos = 0
@@ -337,14 +381,14 @@ class Check:
         self.margin = margin
         self.shift = shift
 
-        self.check_value = check
-        self.check_color = check_color
-        self.check_on_switch = check_on_switch
+        self.check = check
+        self.check_color = utils.resolve_color(check_color, colors.foreground)
+        self.check_on_switch = utils.resolve_color(check_on_switch, colors.foreground)
 
-        self.word_color = word_color
-        self.word_on_switch = word_on_switch
-        self.background_color = background_color
-        self.background_on_switch = background_on_switch
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
+        self.word_on_switch = utils.resolve_color(word_on_switch, colors.foreground)
+        self.background_color = utils.resolve_color(background_color, colors.background)
+        self.background_on_switch = utils.resolve_color(background_on_switch, colors.background)
         self.pad_right = pad_right
 
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
@@ -478,7 +522,14 @@ class Check:
 
 
 class CheckDependencies(Check):
-    """Extend Check to follow dependencies."""
+    """
+    Checkbox selector with dependency management between choices.
+
+    Args:
+        prompt (str): Prompt text.
+        dep_tree (tuple): Tuple of (choice, dependencies) pairs.
+        All color arguments as in Check.
+    """
 
     def __init__(self, prompt="", dep_tree=(), *args, **kwargs):
         """Extract choices from the dep_tree."""
@@ -554,6 +605,18 @@ class CheckDependencies(Check):
 
 
 class YesNo:
+    """
+    Yes/No prompt for CLI with color customization.
+
+    Args:
+        prompt (str): Prompt text.
+        default (str): Default answer ('y' or 'n').
+        indent (int): Indentation from left.
+        prompt_color (str): Foreground color for prompt. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        word_color (str): Foreground color for user input. Available: same as above.
+        prompt_prefix (str): Prefix for prompt (e.g., '[y/n] ').
+    """
+
     def __init__(
         self,
         prompt: str = "",
@@ -569,10 +632,9 @@ class YesNo:
         if default.lower() not in ["y", "n"]:
             raise ValueError("`default` can only be 'y' or 'n'!")
         self.default = f"[{default.lower()}]: "
-        self.default = f"[{default.lower()}]: "
         self.prompt = prompt_prefix + prompt
-        self.prompt_color = prompt_color
-        self.word_color = word_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
 
     def valid(self, ans):
         if ans is None:
@@ -612,6 +674,19 @@ class YesNo:
 
 
 class Input:
+    """
+    Text input prompt for CLI with color and pattern validation.
+
+    Args:
+        prompt (str): Prompt text.
+        default (str): Default value.
+        indent (int): Indentation from left.
+        prompt_color (str): Foreground color for prompt. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        word_color (str): Foreground color for user input. Available: same as above.
+        strip (bool): If True, strip whitespace from result.
+        pattern (str): Regex pattern for validation.
+    """
+
     def __init__(
         self,
         prompt: str = "",
@@ -627,8 +702,8 @@ class Input:
             raise ValueError(PROMPT_EMPTY_ERROR)
         self.default = f"[{default}]: " if default else ""
         self.prompt = prompt
-        self.prompt_color = prompt_color
-        self.word_color = word_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
         self.strip = strip
         self.pattern = pattern
 
@@ -676,6 +751,17 @@ class Input:
 
 
 class Password:
+    """
+    Password input prompt for CLI with color and masking support.
+
+    Args:
+        prompt (str): Prompt text.
+        indent (int): Indentation from left.
+        hidden (str): Character to display for masked input.
+        prompt_color (str): Foreground color for prompt. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        word_color (str): Foreground color for user input. Available: same as above.
+    """
+
     def __init__(
         self,
         prompt: str = "",
@@ -685,12 +771,12 @@ class Password:
         word_color: str = colors.foreground["default"],
     ):
         self.indent = indent
-        self.prompt_color = prompt_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
         if not prompt:
             raise ValueError(PROMPT_EMPTY_ERROR)
         self.prompt = prompt
         self.hidden = hidden
-        self.word_color = word_color
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
 
     def launch(self):
         utils.force_write(
@@ -702,6 +788,17 @@ class Password:
 
 
 class Numbers:
+    """
+    Numeric input prompt for CLI with color and type validation.
+
+    Args:
+        prompt (str): Prompt text.
+        indent (int): Indentation from left.
+        prompt_color (str): Foreground color for prompt. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        word_color (str): Foreground color for user input. Available: same as above.
+        type (type): Type to cast input (int, float, etc.).
+    """
+
     def __init__(
         self,
         prompt: str = "",
@@ -714,8 +811,8 @@ class Numbers:
         if not prompt:
             raise ValueError(PROMPT_EMPTY_ERROR)
         self.prompt = prompt
-        self.prompt_color = prompt_color
-        self.word_color = word_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
         self.type = type
 
     def valid(self, ans):
@@ -752,6 +849,16 @@ class Numbers:
 
 
 class VerticalPrompt:
+    """
+    Vertical multi-component prompt for CLI with color and separator customization.
+
+    Args:
+        components (list): List of prompt components.
+        spacing (int): Spacing between components.
+        separator (str): Separator string.
+        separator_color (str): Foreground color for separator. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+    """
+
     def __init__(
         self,
         components,
@@ -764,7 +871,7 @@ class VerticalPrompt:
         self.components = components
         self.spacing = spacing
         self.separator = separator
-        self.separator_color = separator_color
+        self.separator_color = utils.resolve_color(separator_color, colors.foreground)
         self.separator_len = len(
             max(self.components, key=lambda ui: len(ui.prompt)).prompt
         )
@@ -789,6 +896,31 @@ class VerticalPrompt:
 
 @keyhandler.init
 class ScrollBar:
+    """
+    Scrollable list selector for CLI with color and pointer customization.
+
+    Args:
+        prompt (str): Prompt text.
+        choices (list): List of choices to display.
+        pointer (str): Pointer character for selection.
+        up_indicator (str): Up arrow indicator.
+        down_indicator (str): Down arrow indicator.
+        prompt_color (str): Foreground color for prompt. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        pointer_color (str): Foreground color for pointer. Available: same as above.
+        indicator_color (str): Foreground color for indicators. Available: same as above.
+        word_color (str): Foreground color for choices. Available: same as above.
+        word_on_switch (str): Foreground color for selected choice. Available: same as above, or colors.REVERSE.
+        background_color (str): Background color for choices. Available: black, red, green, yellow, blue, magenta, cyan, white, default.
+        background_on_switch (str): Background color for selected choice. Available: same as above, or colors.REVERSE.
+        pad_right (int): Padding to the right of choices.
+        indent (int): Indentation from left.
+        align (int): Additional alignment spaces.
+        margin (int): Margin between pointer and text.
+        shift (int): Lines to shift down after prompt.
+        height (int): Number of visible rows.
+        return_index (bool): If True, return (choice, index).
+    """
+
     def __init__(
         self,
         prompt: str = "",
@@ -819,7 +951,7 @@ class ScrollBar:
             raise ValueError(MARGIN_ERROR)
 
         self.prompt = prompt
-        self.prompt_color = prompt_color
+        self.prompt_color = utils.resolve_color(prompt_color, colors.foreground)
         self.choices = choices
         self.pos = 0  # Position of item at current cursor.
 
@@ -832,12 +964,12 @@ class ScrollBar:
         self.up_indicator = up_indicator
         self.down_indicator = down_indicator
 
-        self.pointer_color = pointer_color
-        self.indicator_color = indicator_color
-        self.word_color = word_color
-        self.word_on_switch = word_on_switch
-        self.background_color = background_color
-        self.background_on_switch = background_on_switch
+        self.pointer_color = utils.resolve_color(pointer_color, colors.foreground)
+        self.indicator_color = utils.resolve_color(indicator_color, colors.foreground)
+        self.word_color = utils.resolve_color(word_color, colors.foreground)
+        self.word_on_switch = utils.resolve_color(word_on_switch, colors.foreground)
+        self.background_color = utils.resolve_color(background_color, colors.background)
+        self.background_on_switch = utils.resolve_color(background_on_switch, colors.background)
 
         self.max_width = len(max(self.choices, key=len)) + self.pad_right
         self.height = min(
@@ -924,19 +1056,16 @@ class ScrollBar:
         if self.pos == self.top + self.height - 1:
             if self.top + self.height == len(self.choices):
                 return
-            utils.clear_console_up(self.height)
-            utils.move_cursor_down(1)
-            self.pos, self.top = self.pos + 1, self.top + 1
-            self.render_rows()
-            utils.move_cursor_up(1)
+            else:
+                utils.moveCursorDown(self.height - (self.pos - self.top + 1))
         else:
-            utils.clear_line()
-            old_pos = self.pos
-            self.pos += 1
-            show_arrow = old_pos == self.top and self.top > 0
-            self.print_row(old_pos, indicator=self.up_indicator if show_arrow else "")
-            utils.move_cursor_down(1)
-            self.print_row(self.pos)
+            utils.moveCursorDown(self.height - (self.pos - self.top + 1))
+        utils.clearConsoleUp(self.height)
+        utils.moveCursorDown(1)
+        self.top = min(len(self.choices) - self.height, self.top + self.height)
+        self.pos = min(len(self.choices) - 1, self.pos + self.height)
+        self.renderRows()
+        utils.moveCursorUp(1 + self.height - (self.pos - self.top + 1))
 
     @keyhandler.register(char.HOME_KEY)
     def move_top(self):
@@ -1029,6 +1158,13 @@ class ScrollBar:
 
 
 class SlidePrompt:
+    """
+    Horizontal multi-component prompt for CLI.
+
+    Args:
+        components (list): List of prompt components.
+    """
+
     def __init__(self, components):
         self.idx = 0
         self.components = components
@@ -1078,7 +1214,7 @@ class Date(Input):
     ):
         if default:
             default = default.strftime(format_str)
-        super().__init__(prompt, default=default, indent=indent, word_color=word_color)
+        super().__init__(prompt, default=default, indent=indent, word_color=utils.resolve_color(word_color, colors.foreground))
 
     def launch(self):
         while True:
