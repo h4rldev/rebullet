@@ -382,6 +382,7 @@ class Check:
         self.shift = shift
 
         self.check = check
+        self.check_value = check
         self.check_color = utils.resolve_color(check_color, colors.foreground)
         self.check_on_switch = utils.resolve_color(check_on_switch, colors.foreground)
 
@@ -655,7 +656,7 @@ class YesNo:
         return False
 
     def launch(self):
-        my_input = MyInput(word_color=self.word_color)
+        my_input = myInput(word_color=self.word_color)
         utils.force_write(
             " " * self.indent
             + self.prompt_color
@@ -724,7 +725,7 @@ class Input:
             + self.default
             + colors.RESET
         )
-        sess = MyInput(word_color=self.word_color)
+        sess = myInput(word_color=self.word_color)
         if not self.pattern:
             while True:
                 result = sess.input()
@@ -782,7 +783,7 @@ class Password:
         utils.force_write(
             " " * self.indent + self.prompt_color + self.prompt + colors.RESET
         )
-        return MyInput(
+        return myInput(
             password=True, hidden=self.hidden, word_color=self.word_color
         ).input()
 
@@ -834,7 +835,7 @@ class Numbers:
                 self.type(default)
             except Exception:
                 raise ValueError(f"`default` should be a {str(self.type)}") from None
-        my_input = MyInput(word_color=self.word_color)
+        my_input = myInput(word_color=self.word_color)
         utils.force_write(
             " " * self.indent + self.prompt_color + self.prompt + colors.RESET
         )
