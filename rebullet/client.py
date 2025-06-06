@@ -382,6 +382,7 @@ class Check:
         self.shift = shift
 
         self.check = check
+        self.check_value = check
         self.check_color = utils.resolve_color(check_color, colors.foreground)
         self.check_on_switch = utils.resolve_color(check_on_switch, colors.foreground)
 
